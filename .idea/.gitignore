@@ -8,3 +8,99 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+# ignore all idea settings
+.idea/*
+*.iws
+*.iml
+*.ipr
+
+# gradle project minimum
+!.idea/gradle.xml
+!.idea/misc.xml
+
+# enable plugin dependencies
+!.idea/externalDependencies.xml
+
+# enable codestyle, with save actions
+!.idea/codeStyles
+!.idea/saveactions_settting.xml
+
+# enable inspection rules
+!.idea/inspectionProfiles
+
+# enable annotation processor for lombok plugin
+!.idea/compiler.xml
+
+# enable checkstyle ide
+!.idea/checkstyle-idea.xml
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Linker files
+*.ilk
+
+# Debugger Files
+*.pdb
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+*.so.*
+
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Build directories
+build/
+Build/
+build-*/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+install_manifest.txt
+compile_commands.json
+
+# Temporary files
+*.tmp
+*.log
+*.bak
+*.swp
+
+# vcpkg
+vcpkg_installed/
+
+# debug information files
+*.dwo
+
+# test output & cache
+Testing/
+.cache/
