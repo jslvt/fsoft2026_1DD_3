@@ -18,8 +18,8 @@ class Corrida {
   -nome : string
 }
 
-class Participacao {
-  -posicao : int
+class Participação {
+  -posição : int
   -tempo : float
 }
 
@@ -27,10 +27,10 @@ class Participacao {
 Equipa "1" -- "0..*" Piloto
 Equipa "1" -- "0..*" Veiculo
 
-Piloto "1" -- "0..*" Participacao
-Corrida "1" -- "0..*" Participacao
+Piloto "1" -- "0..*" Participação
+Corrida "1" -- "0..*" Participação
 
-Participacao "0..*" --> "1" Piloto
-Participacao "0..*" --> "1" Corrida
+Participação "0..*" --> "1" Piloto
+Participação "0..*" --> "1" Corrida
 
 @enduml
