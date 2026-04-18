@@ -1,0 +1,36 @@
+@startuml
+
+class Piloto {
+  -id : int
+  -nome : string
+  -idade : int
+}
+
+class Equipa {
+  -nome : string
+}
+
+class Veiculo {
+  -modelo : string
+}
+
+class Corrida {
+  -nome : string
+}
+
+class Participacao {
+  -posicao : int
+  -tempo : float
+}
+
+' Relações
+Equipa "1" -- "0..*" Piloto
+Equipa "1" -- "0..*" Veiculo
+
+Piloto "1" -- "0..*" Participacao
+Corrida "1" -- "0..*" Participacao
+
+Participacao "0..*" --> "1" Piloto
+Participacao "0..*" --> "1" Corrida
+
+@enduml

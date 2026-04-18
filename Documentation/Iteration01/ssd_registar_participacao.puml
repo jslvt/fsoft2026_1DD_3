@@ -1,0 +1,11 @@
+@startuml
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : registarParticipacao()
+Sistema -> Sistema : validarDados()
+Sistema -> Sistema : guardarParticipacao()
+Sistema -> Utilizador : sucesso
+
+@enduml

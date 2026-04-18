@@ -1,0 +1,24 @@
+@startuml
+
+actor Utilizador
+
+usecase "Criar Piloto" as UC1
+usecase "Criar Equipa" as UC2
+usecase "Criar Veiculo" as UC3
+usecase "Criar Corrida" as UC4
+usecase "Registar Participação" as UC5
+usecase "Consultar Classificação" as UC6
+usecase "Selecionar Piloto" as UC7
+usecase "Selecionar Corrida" as UC8
+
+Utilizador --> UC1
+Utilizador --> UC2
+Utilizador --> UC3
+Utilizador --> UC4
+Utilizador --> UC5
+Utilizador --> UC6
+
+UC5 .> UC7 : <<include>>
+UC5 .> UC8 : <<include>>
+
+@enduml
