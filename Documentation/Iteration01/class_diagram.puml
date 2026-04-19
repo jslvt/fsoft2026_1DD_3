@@ -1,0 +1,197 @@
+@startuml
+
+title Class Diagram - Arquitetura C++ CLI
+
+' ─────────────────────────────────────────
+' UI Layer
+' ─────────────────────────────────────────
+package "UI" {
+
+  class Menu {
+    +mostrarMenu() : void
+    +lerOpcao()    : int
+  }
+
+  class PilotoUI {
+    -ctrl : PilotoController*
+    +criarPiloto()          : void
+    +listarPilotos()        : void
+  }
+
+  class EquipaUI {
+    -ctrl : EquipaController*
+    +criarEquipa()          : void
+    +listarEquipas()        : void
+  }
+
+  class VeiculoUI {
+    -ctrl : VeiculoController*
+    +criarVeiculo()         : void
+    +listarVeiculos()       : void
+  }
+
+  class CorridaUI {
+    -ctrl : CorridaController*
+    +criarCorrida()         : void
+    +listarCorridas()       : void
+  }
+
+  class ParticipacaoUI {
+    -ctrl : ParticipacaoController*
+    +registarParticipacao() : void
+    +consultarClassificacao() : void
+  }
+}
+
+' ─────────────────────────────────────────
+' Controller Layer
+' ─────────────────────────────────────────
+package "Controller" {
+
+  class PilotoController {
+    -store : PilotoStore*
+    +criarPiloto(nome, dataNasc, nLicenca) : bool
+    +obterTodos()                          : vector<Piloto>
+    +obterPorId(id)                        : Piloto*
+  }
+
+  class EquipaController {
+    -store : EquipaStore*
+    +criarEquipa(nome, pais)  : bool
+    +obterTodos()             : vector<Equipa>
+    +obterPorId(id)           : Equipa*
+  }
+
+  class VeiculoController {
+    -store : VeiculoStore*
+    +criarVeiculo(modelo, matricula, ano) : bool
+    +obterTodos()                         : vector<Veiculo>
+  }
+
+  class CorridaController {
+    -store : CorridaStore*
+    +criarCorrida(nome, circuito, data) : bool
+    +obterTodos()                       : vector<Corrida>
+    +obterPorId(id)                     : Corrida*
+  }
+
+  class ParticipacaoController {
+    -store        : ParticipacaoStore*
+    -pilotoCtrl   : PilotoController*
+    -corridaCtrl  : CorridaController*
+    +registarParticipacao(idPiloto, idCorrida, posicao, tempo) : bool
+    +obterClassificacao(idCorrida) : vector<Participacao>
+  }
+}
+
+' ─────────────────────────────────────────
+' Store (Persistence) Layer
+' ─────────────────────────────────────────
+package "Store" {
+
+  class PilotoStore {
+    -ficheiro : string
+    +guardar(pilotos)     : void
+    +carregar()           : vector<Piloto>
+  }
+
+  class EquipaStore {
+    -ficheiro : string
+    +guardar(equipas)     : void
+    +carregar()           : vector<Equipa>
+  }
+
+  class VeiculoStore {
+    -ficheiro : string
+    +guardar(veiculos)    : void
+    +carregar()           : vector<Veiculo>
+  }
+
+  class CorridaStore {
+    -ficheiro : string
+    +guardar(corridas)    : void
+    +carregar()           : vector<Corrida>
+  }
+
+  class ParticipacaoStore {
+    -ficheiro : string
+    +guardar(participacoes) : void
+    +carregar()             : vector<Participacao>
+  }
+}
+
+' ─────────────────────────────────────────
+' Model Layer
+' ─────────────────────────────────────────
+package "Model" {
+
+  class Piloto {
+    -id        : int
+    -nome      : string
+    -dataNasc  : string
+    -nLicenca  : string
+    +getId()   : int
+    +getNome() : string
+  }
+
+  class Equipa {
+    -id    : int
+    -nome  : string
+    -pais  : string
+    +getId()   : int
+    +getNome() : string
+  }
+
+  class Veiculo {
+    -id        : int
+    -modelo    : string
+    -matricula : string
+    -ano       : int
+  }
+
+  class Corrida {
+    -id        : int
+    -nome      : string
+    -circuito  : string
+    -data      : string
+    +getId()   : int
+    +getNome() : string
+  }
+
+  class Participacao {
+    -idPiloto  : int
+    -idCorrida : int
+    -posicao   : int
+    -tempo     : float
+    -pontos    : int
+  }
+}
+
+' ─────────────────────────────────────────
+' Relations
+' ─────────────────────────────────────────
+
+' UI → Controller
+PilotoUI         --> PilotoController
+EquipaUI         --> EquipaController
+VeiculoUI        --> VeiculoController
+CorridaUI        --> CorridaController
+ParticipacaoUI   --> ParticipacaoController
+
+' Controller → Store
+PilotoController        --> PilotoStore
+EquipaController        --> EquipaStore
+VeiculoController       --> VeiculoStore
+CorridaController       --> CorridaStore
+ParticipacaoController  --> ParticipacaoStore
+ParticipacaoController  --> PilotoController
+ParticipacaoController  --> CorridaController
+
+' Store → Model
+PilotoStore       ..> Piloto
+EquipaStore       ..> Equipa
+VeiculoStore      ..> Veiculo
+CorridaStore      ..> Corrida
+ParticipacaoStore ..> Participacao
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+
+title SSD: UC10 - Consultar Classificação
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : pedirListaCorridas()
+Sistema     --> Utilizador : listaCorridas
+
+Utilizador -> Sistema : selecionarCorrida(idCorrida)
+Sistema     -> Sistema  : obterParticipacoes(idCorrida)
+Sistema     -> Sistema  : ordenarPorPosicao()
+
+alt [corrida existe e tem participações]
+  Sistema --> Utilizador : classificacao
+else [sem resultados]
+  Sistema --> Utilizador : semResultados
+end
+
+@enduml

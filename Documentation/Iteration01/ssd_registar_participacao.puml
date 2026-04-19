@@ -1,11 +1,30 @@
 @startuml
 
+title SSD: UC9 - Registar Participação
+
 actor Utilizador
 participant Sistema
 
-Utilizador -> Sistema : registarParticipacao()
-Sistema -> Sistema : validarDados()
-Sistema -> Sistema : guardarParticipacao()
-Sistema -> Utilizador : sucesso
+Utilizador -> Sistema : pedirListaPilotos()
+Sistema     --> Utilizador : listaPilotos
+
+Utilizador -> Sistema : selecionarPiloto(idPiloto)
+Sistema     --> Utilizador : piloto
+
+Utilizador -> Sistema : pedirListaCorridas()
+Sistema     --> Utilizador : listaCorridas
+
+Utilizador -> Sistema : selecionarCorrida(idCorrida)
+Sistema     --> Utilizador : corrida
+
+Utilizador -> Sistema : registarParticipacao(idPiloto, idCorrida, posicao, tempo)
+Sistema     -> Sistema  : validarDados()
+
+alt [dados válidos]
+  Sistema -> Sistema  : guardarParticipacao()
+  Sistema --> Utilizador : sucesso
+else [dados inválidos]
+  Sistema --> Utilizador : falha
+end
 
 @enduml

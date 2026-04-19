@@ -1,0 +1,19 @@
+@startuml
+
+title SSD: UC1 - Criar Piloto
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : introduzirDadosPiloto(nome, dataNasc, nLicenca)
+Utilizador -> Sistema : guardarPiloto()
+Sistema     -> Sistema  : validarDadosPiloto()
+
+alt [dados válidos]
+  Sistema -> Sistema  : armazenarPiloto()
+  Sistema --> Utilizador : sucesso
+else [dados inválidos]
+  Sistema --> Utilizador : falha
+end
+
+@enduml

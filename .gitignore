@@ -1,0 +1,25 @@
+# CLion / IntelliJ
+.idea/
+
+# CMake build output
+cmake-build-debug/
+cmake-build-release/
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# Compiled binaries and objects
+*.o
+*.a
+*.out
+*.exe
+*.dll
+*.so
+
+# Testing temp files
+Testing/

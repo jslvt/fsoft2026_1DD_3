@@ -1,36 +1,51 @@
 @startuml
 
+title Domain Model - Software de Gestão de Pilotos de Automobilismo
+
 class Piloto {
-  -id : int
-  -nome : string
-  -idade : int
+  -id        : int
+  -nome      : string
+  -dataNasc  : string
+  -nLicenca  : string
 }
 
 class Equipa {
-  -nome : string
+  -id    : int
+  -nome  : string
+  -pais  : string
 }
 
 class Veiculo {
-  -modelo : string
+  -id        : int
+  -modelo    : string
+  -matricula : string
+  -ano       : int
 }
 
 class Corrida {
-  -nome : string
+  -id        : int
+  -nome      : string
+  -circuito  : string
+  -data      : string
 }
 
-class Participação {
-  -posição : int
-  -tempo : float
+class Participacao {
+  -posicao   : int
+  -tempo     : float
+  -pontos    : int
 }
 
-' Relações
-Equipa "1" -- "0..*" Piloto
-Equipa "1" -- "0..*" Veiculo
+' Associative class breaking Piloto <-> Corrida many-to-many
+' Participacao is the associative class
 
-Piloto "1" -- "0..*" Participação
-Corrida "1" -- "0..*" Participação
+' Relations
+Equipa  "1"    --  "0..*"  Piloto      : contém
+Equipa  "1"    --  "0..*"  Veiculo     : possui
 
-Participação "0..*" --> "1" Piloto
-Participação "0..*" --> "1" Corrida
+Piloto  "1"    --  "0..*"  Participacao
+Corrida "1"    --  "0..*"  Participacao
+
+Participacao "0..*" --> "1" Piloto
+Participacao "0..*" --> "1" Corrida
 
 @enduml

@@ -1,0 +1,81 @@
+@startuml
+
+title Package Diagram - Estrutura do Projeto C++ CLI
+
+package "main" {
+  [main.cpp]
+}
+
+package "ui" {
+  [Menu.h / Menu.cpp]
+  [PilotoUI.h / PilotoUI.cpp]
+  [EquipaUI.h / EquipaUI.cpp]
+  [VeiculoUI.h / VeiculoUI.cpp]
+  [CorridaUI.h / CorridaUI.cpp]
+  [ParticipacaoUI.h / ParticipacaoUI.cpp]
+}
+
+package "controller" {
+  [PilotoController.h / .cpp]
+  [EquipaController.h / .cpp]
+  [VeiculoController.h / .cpp]
+  [CorridaController.h / .cpp]
+  [ParticipacaoController.h / .cpp]
+}
+
+package "store" {
+  [PilotoStore.h / .cpp]
+  [EquipaStore.h / .cpp]
+  [VeiculoStore.h / .cpp]
+  [CorridaStore.h / .cpp]
+  [ParticipacaoStore.h / .cpp]
+}
+
+package "model" {
+  [Piloto.h / .cpp]
+  [Equipa.h / .cpp]
+  [Veiculo.h / .cpp]
+  [Corrida.h / .cpp]
+  [Participacao.h / .cpp]
+}
+
+package "data" <<folder>> {
+  [pilotos.bin]
+  [equipas.bin]
+  [veiculos.bin]
+  [corridas.bin]
+  [participacoes.bin]
+}
+
+[main.cpp]         --> [Menu.h / Menu.cpp]
+[Menu.h / Menu.cpp] --> [PilotoUI.h / PilotoUI.cpp]
+[Menu.h / Menu.cpp] --> [EquipaUI.h / EquipaUI.cpp]
+[Menu.h / Menu.cpp] --> [VeiculoUI.h / VeiculoUI.cpp]
+[Menu.h / Menu.cpp] --> [CorridaUI.h / CorridaUI.cpp]
+[Menu.h / Menu.cpp] --> [ParticipacaoUI.h / ParticipacaoUI.cpp]
+
+[PilotoUI.h / PilotoUI.cpp]         --> [PilotoController.h / .cpp]
+[EquipaUI.h / EquipaUI.cpp]         --> [EquipaController.h / .cpp]
+[VeiculoUI.h / VeiculoUI.cpp]       --> [VeiculoController.h / .cpp]
+[CorridaUI.h / CorridaUI.cpp]       --> [CorridaController.h / .cpp]
+[ParticipacaoUI.h / ParticipacaoUI.cpp] --> [ParticipacaoController.h / .cpp]
+
+[PilotoController.h / .cpp]        --> [PilotoStore.h / .cpp]
+[EquipaController.h / .cpp]        --> [EquipaStore.h / .cpp]
+[VeiculoController.h / .cpp]       --> [VeiculoStore.h / .cpp]
+[CorridaController.h / .cpp]       --> [CorridaStore.h / .cpp]
+[ParticipacaoController.h / .cpp]  --> [ParticipacaoStore.h / .cpp]
+
+[PilotoController.h / .cpp]        --> [Piloto.h / .cpp]
+[EquipaController.h / .cpp]        --> [Equipa.h / .cpp]
+[VeiculoController.h / .cpp]       --> [Veiculo.h / .cpp]
+[CorridaController.h / .cpp]       --> [Corrida.h / .cpp]
+[ParticipacaoController.h / .cpp]  --> [Participacao.h / .cpp]
+
+[PilotoStore.h / .cpp]        --> [pilotos.bin]
+[EquipaStore.h / .cpp]        --> [equipas.bin]
+[VeiculoStore.h / .cpp]       --> [veiculos.bin]
+[CorridaStore.h / .cpp]       --> [corridas.bin]
+[ParticipacaoStore.h / .cpp]  --> [participacoes.bin]
+
+@enduml
