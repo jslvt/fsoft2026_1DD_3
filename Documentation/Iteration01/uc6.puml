@@ -1,0 +1,17 @@
+@startuml
+
+title SSD: UC6 - Listar Veículos
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : pedirListaVeiculos()
+Sistema    -> Sistema : obterTodosVeiculos()
+
+alt [existem veículos]
+  Sistema --> Utilizador : listaVeiculos
+else [sem veículos registados]
+  Sistema --> Utilizador : listaVazia
+end
+
+@enduml

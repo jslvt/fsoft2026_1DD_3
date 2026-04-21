@@ -1,0 +1,17 @@
+@startuml
+
+title SSD: UC2 - Listar Pilotos
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : pedirListaPilotos()
+Sistema    -> Sistema : obterTodosPilotos()
+
+alt [existem pilotos]
+  Sistema --> Utilizador : listaPilotos
+else [sem pilotos registados]
+  Sistema --> Utilizador : listaVazia
+end
+
+@enduml

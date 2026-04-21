@@ -7,7 +7,7 @@ participant Sistema
 
 Utilizador -> Sistema : introduzirDadosPiloto(nome, dataNasc, nLicenca)
 Utilizador -> Sistema : guardarPiloto()
-Sistema     -> Sistema  : validarDadosPiloto()
+Sistema    -> Sistema : validarDadosPiloto()
 
 alt [dados válidos]
   Sistema -> Sistema  : armazenarPiloto()

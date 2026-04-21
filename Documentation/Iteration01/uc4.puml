@@ -1,0 +1,17 @@
+@startuml
+
+title SSD: UC4 - Listar Equipas
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : pedirListaEquipas()
+Sistema    -> Sistema : obterTodasEquipas()
+
+alt [existem equipas]
+  Sistema --> Utilizador : listaEquipas
+else [sem equipas registadas]
+  Sistema --> Utilizador : listaVazia
+end
+
+@enduml

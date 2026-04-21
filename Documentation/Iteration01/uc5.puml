@@ -1,0 +1,19 @@
+@startuml
+
+title SSD: UC5 - Criar Veículo
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : introduzirDadosVeiculo(modelo, matricula, ano)
+Utilizador -> Sistema : guardarVeiculo()
+Sistema    -> Sistema : validarDadosVeiculo()
+
+alt [dados válidos]
+  Sistema -> Sistema  : armazenarVeiculo()
+  Sistema --> Utilizador : sucesso
+else [dados inválidos]
+  Sistema --> Utilizador : falha
+end
+
+@enduml

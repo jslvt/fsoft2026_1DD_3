@@ -1,0 +1,17 @@
+@startuml
+
+title SSD: UC8 - Listar Corridas
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : pedirListaCorridas()
+Sistema    -> Sistema : obterTodasCorridas()
+
+alt [existem corridas]
+  Sistema --> Utilizador : listaCorridas
+else [sem corridas registadas]
+  Sistema --> Utilizador : listaVazia
+end
+
+@enduml

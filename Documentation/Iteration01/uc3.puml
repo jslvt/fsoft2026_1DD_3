@@ -1,0 +1,19 @@
+@startuml
+
+title SSD: UC3 - Criar Equipa
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : introduzirDadosEquipa(nome, pais)
+Utilizador -> Sistema : guardarEquipa()
+Sistema    -> Sistema : validarDadosEquipa()
+
+alt [dados válidos]
+  Sistema -> Sistema  : armazenarEquipa()
+  Sistema --> Utilizador : sucesso
+else [dados inválidos]
+  Sistema --> Utilizador : falha
+end
+
+@enduml

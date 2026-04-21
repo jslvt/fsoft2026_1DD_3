@@ -6,19 +6,19 @@ actor Utilizador
 participant Sistema
 
 Utilizador -> Sistema : pedirListaPilotos()
-Sistema     --> Utilizador : listaPilotos
+Sistema    --> Utilizador : listaPilotos
 
 Utilizador -> Sistema : selecionarPiloto(idPiloto)
-Sistema     --> Utilizador : piloto
+Sistema    --> Utilizador : piloto
 
 Utilizador -> Sistema : pedirListaCorridas()
-Sistema     --> Utilizador : listaCorridas
+Sistema    --> Utilizador : listaCorridas
 
 Utilizador -> Sistema : selecionarCorrida(idCorrida)
-Sistema     --> Utilizador : corrida
+Sistema    --> Utilizador : corrida
 
 Utilizador -> Sistema : registarParticipacao(idPiloto, idCorrida, posicao, tempo)
-Sistema     -> Sistema  : validarDados()
+Sistema    -> Sistema  : validarDados()
 
 alt [dados válidos]
   Sistema -> Sistema  : guardarParticipacao()

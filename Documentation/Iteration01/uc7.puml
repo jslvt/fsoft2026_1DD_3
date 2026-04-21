@@ -1,0 +1,19 @@
+@startuml
+
+title SSD: UC7 - Criar Corrida
+
+actor Utilizador
+participant Sistema
+
+Utilizador -> Sistema : introduzirDadosCorrida(nome, circuito, data)
+Utilizador -> Sistema : guardarCorrida()
+Sistema    -> Sistema : validarDadosCorrida()
+
+alt [dados válidos]
+  Sistema -> Sistema  : armazenarCorrida()
+  Sistema --> Utilizador : sucesso
+else [dados inválidos]
+  Sistema --> Utilizador : falha
+end
+
+@enduml

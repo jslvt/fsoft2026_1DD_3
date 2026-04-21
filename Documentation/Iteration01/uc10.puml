@@ -6,15 +6,15 @@ actor Utilizador
 participant Sistema
 
 Utilizador -> Sistema : pedirListaCorridas()
-Sistema     --> Utilizador : listaCorridas
+Sistema    --> Utilizador : listaCorridas
 
 Utilizador -> Sistema : selecionarCorrida(idCorrida)
-Sistema     -> Sistema  : obterParticipacoes(idCorrida)
-Sistema     -> Sistema  : ordenarPorPosicao()
+Sistema    -> Sistema  : obterParticipacoes(idCorrida)
+Sistema    -> Sistema  : ordenarPorPosicao()
 
-alt [corrida existe e tem participações]
+alt [corrida tem participações]
   Sistema --> Utilizador : classificacao
-else [sem resultados]
+else [sem participações registadas]
   Sistema --> Utilizador : semResultados
 end
 
