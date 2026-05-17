@@ -30,7 +30,7 @@ class Corrida {
 }
 
 class Participacao {
-  -posicao   : int
+  -posição   : int
   -tempo     : float
   -pontos    : int
 }
