@@ -33,7 +33,7 @@ std::string Menu::lerString(const std::string& prompt) {
         std::cout << "  " << prompt << ": ";
         std::getline(std::cin, valor);
         if (!valor.empty()) return valor;
-        std::cout << "  [Erro] Campo obrigatório. Tente novamente.\n";
+        std::cout << "  [Erro] Campo obrigatorio. Tente novamente.\n";
     }
 }
 
@@ -48,7 +48,7 @@ int Menu::lerInt(const std::string& prompt) {
         }
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "  [Erro] Valor inteiro inválido. Tente novamente.\n";
+        std::cout << "  [Erro] Valor inteiro invalido. Tente novamente.\n";
     }
 }
 
@@ -63,7 +63,7 @@ float Menu::lerFloat(const std::string& prompt) {
         }
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::cout << "  [Erro] Valor decimal inválido. Tente novamente.\n";
+        std::cout << "  [Erro] Valor decimal invalido. Tente novamente.\n";
     }
 }
 

@@ -13,7 +13,7 @@ void CorridaUI::criarCorrida() {
     if (m_ctrl.criarCorrida(nome, circuito, data))
         std::cout << "  [OK] Corrida criada com sucesso.\n";
     else
-        std::cout << "  [ERRO] Não foi possível criar a corrida.\n";
+        std::cout << "  [ERRO] Nao foi possivel criar a corrida.\n";
 
     Menu::pausar();
 }

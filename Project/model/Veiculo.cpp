@@ -20,7 +20,7 @@ void Veiculo::print() const {
     std::cout << std::left
               << "[" << std::setw(3) << m_id << "] "
               << std::setw(25) << m_modelo
-              << "  Matrícula: " << std::setw(12) << m_matricula
+              << "  Matricula: " << std::setw(12) << m_matricula
               << "  Ano: " << m_ano
               << "\n";
 }

@@ -9,7 +9,7 @@ ParticipacaoUI::ParticipacaoUI(ParticipacaoController& ctrl,
     : m_ctrl(ctrl), m_pilotoCtrl(pilotoCtrl), m_corridaCtrl(corridaCtrl) {}
 
 void ParticipacaoUI::registarParticipacao() {
-    std::cout << "\n=== Registar Participação ===\n";
+    std::cout << "\n=== Registar Participacao ===\n";
 
     int idPiloto = selecionarPiloto();
     if (idPiloto == 0) { Menu::pausar(); return; }
@@ -17,19 +17,19 @@ void ParticipacaoUI::registarParticipacao() {
     int idCorrida = selecionarCorrida();
     if (idCorrida == 0) { Menu::pausar(); return; }
 
-    int   posicao = Menu::lerInt("Posição Final");
+    int   posicao = Menu::lerInt("Posicao Final");
     float tempo   = Menu::lerFloat("Tempo (segundos, ex: 5432.765)");
 
     if (m_ctrl.registarParticipacao(idPiloto, idCorrida, posicao, tempo))
-        std::cout << "  [OK] Participação registada com sucesso.\n";
+        std::cout << "  [OK] Participacao registada com sucesso.\n";
     else
-        std::cout << "  [ERRO] Não foi possível registar a participação.\n";
+        std::cout << "  [ERRO] Nao foi possivel registar a participacao.\n";
 
     Menu::pausar();
 }
 
 void ParticipacaoUI::consultarClassificacao() {
-    std::cout << "\n=== Consultar Classificação ===\n";
+    std::cout << "\n=== Consultar Classificacao ===\n";
 
     int idCorrida = selecionarCorrida();
     if (idCorrida == 0) { Menu::pausar(); return; }
@@ -37,7 +37,7 @@ void ParticipacaoUI::consultarClassificacao() {
     Corrida* corrida = m_corridaCtrl.obterPorId(idCorrida);
     auto classificacao = m_ctrl.obterClassificacao(idCorrida);
 
-    std::cout << "\n  Classificação — " << corrida->getNome()
+    std::cout << "\n  Classificacao — " << corrida->getNome()
               << " (" << corrida->getCircuito() << ")\n";
     Menu::separador();
 
@@ -74,13 +74,13 @@ int ParticipacaoUI::selecionarPiloto() {
         std::cout << "  Sem pilotos registados. Crie um piloto primeiro.\n";
         return 0;
     }
-    std::cout << "\n  -- Pilotos disponíveis --\n";
+    std::cout << "\n  -- Pilotos disponiveis --\n";
     for (const auto& p : pilotos)
         p.print();
 
     int id = Menu::lerInt("ID do Piloto");
     if (m_pilotoCtrl.obterPorId(id) == nullptr) {
-        std::cout << "  [ERRO] Piloto não encontrado.\n";
+        std::cout << "  [ERRO] Piloto nao encontrado.\n";
         return 0;
     }
     return id;
@@ -92,13 +92,13 @@ int ParticipacaoUI::selecionarCorrida() {
         std::cout << "  Sem corridas registadas. Crie uma corrida primeiro.\n";
         return 0;
     }
-    std::cout << "\n  -- Corridas disponíveis --\n";
+    std::cout << "\n  -- Corridas disponiveis --\n";
     for (const auto& c : corridas)
         c.print();
 
     int id = Menu::lerInt("ID da Corrida");
     if (m_corridaCtrl.obterPorId(id) == nullptr) {
-        std::cout << "  [ERRO] Corrida não encontrada.\n";
+        std::cout << "  [ERRO] Corrida nao encontrada.\n";
         return 0;
     }
     return id;

@@ -15,7 +15,7 @@ bool CorridaController::criarCorrida(const std::string& nome,
                                       const std::string& data)
 {
     if (nome.empty() || circuito.empty() || data.empty()) {
-        std::cerr << "[CorridaController] Dados inválidos: campos vazios.\n";
+        std::cerr << "[CorridaController] Dados invalidos: campos vazios.\n";
         return false;
     }
     m_corridas.emplace_back(m_nextId++, nome, circuito, data);

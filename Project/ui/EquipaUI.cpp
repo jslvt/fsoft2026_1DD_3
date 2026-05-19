@@ -12,7 +12,7 @@ void EquipaUI::criarEquipa() {
     if (m_ctrl.criarEquipa(nome, pais))
         std::cout << "  [OK] Equipa criada com sucesso.\n";
     else
-        std::cout << "  [ERRO] Não foi possível criar a equipa.\n";
+        std::cout << "  [ERRO] Não foi possivel criar a equipa.\n";
 
     Menu::pausar();
 }

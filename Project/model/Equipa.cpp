@@ -18,6 +18,6 @@ void Equipa::print() const {
     std::cout << std::left
               << "[" << std::setw(3) << m_id << "] "
               << std::setw(30) << m_nome
-              << "  País: " << m_pais
+              << "  Pais: " << m_pais
               << "\n";
 }

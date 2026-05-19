@@ -16,21 +16,21 @@ bool ParticipacaoController::registarParticipacao(int idPiloto, int idCorrida,
                                                    int posicao, float tempo)
 {
     if (m_pilotoCtrl.obterPorId(idPiloto) == nullptr) {
-        std::cerr << "[ParticipacaoController] Piloto não encontrado: "
+        std::cerr << "[ParticipacaoController] Piloto nao encontrado: "
                   << idPiloto << "\n";
         return false;
     }
     if (m_corridaCtrl.obterPorId(idCorrida) == nullptr) {
-        std::cerr << "[ParticipacaoController] Corrida não encontrada: "
+        std::cerr << "[ParticipacaoController] Corrida nao encontrada: "
                   << idCorrida << "\n";
         return false;
     }
     if (posicao < 1 || tempo <= 0.0f) {
-        std::cerr << "[ParticipacaoController] Posição ou tempo inválidos.\n";
+        std::cerr << "[ParticipacaoController] Posicao ou tempo invalidos.\n";
         return false;
     }
     if (participacaoExiste(idPiloto, idCorrida)) {
-        std::cerr << "[ParticipacaoController] Participação já registada "
+        std::cerr << "[ParticipacaoController] Participacao ja registada "
                      "para este piloto nesta corrida.\n";
         return false;
     }

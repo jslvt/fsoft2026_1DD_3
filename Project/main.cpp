@@ -39,7 +39,7 @@ static void menuEquipas(EquipaUI& ui) {
 static void menuVeiculos(VeiculoUI& ui) {
     int op;
     do {
-        op = Menu::mostrarMenu("Veículos",
+        op = Menu::mostrarMenu("Veiculos",
             {"Criar Veiculo", "Listar Veiculos", "Voltar"});
         if (op == 1) ui.criarVeiculo();
         if (op == 2) ui.listarVeiculos();
@@ -60,7 +60,7 @@ static void menuParticipacoes(ParticipacaoUI& ui) {
     int op;
     do {
         op = Menu::mostrarMenu("Participacoes",
-            {"Registar Participação", "Consultar Classificação", "Voltar"});
+            {"Registar Participacao", "Consultar Classificacao", "Voltar"});
         if (op == 1) ui.registarParticipacao();
         if (op == 2) ui.consultarClassificacao();
     } while (op != 3);
@@ -91,13 +91,13 @@ int main() {
     int op;
     do {
         op = Menu::mostrarMenu(
-            "Sistema de Gestão de Pilotos de Automobilismo",
+            "Sistema de Gestao de Pilotos de Automobilismo",
             {
                 "Pilotos",
                 "Equipas",
-                "Veículos",
+                "Veiculos",
                 "Corridas",
-                "Participações",
+                "Participacoes",
                 "Sair"
             });
         switch (op) {
@@ -110,6 +110,6 @@ int main() {
         }
     } while (op != 6);
 
-    std::cout << "\n  Até logo!\n\n";
+    std::cout << "\n  Ate logo!\n\n";
     return 0;
 }

@@ -16,11 +16,11 @@ bool VeiculoController::criarVeiculo(const std::string& modelo,
                                       int ano)
 {
     if (modelo.empty() || matricula.empty() || ano < 1900 || ano > 2100) {
-        std::cerr << "[VeiculoController] Dados inválidos.\n";
+        std::cerr << "[VeiculoController] Dados invalidos.\n";
         return false;
     }
     if (matriculaExiste(matricula)) {
-        std::cerr << "[VeiculoController] Matrícula já existe: " << matricula << "\n";
+        std::cerr << "[VeiculoController] Matricula ja existe: " << matricula << "\n";
         return false;
     }
     m_veiculos.emplace_back(m_nextId++, modelo, matricula, ano);

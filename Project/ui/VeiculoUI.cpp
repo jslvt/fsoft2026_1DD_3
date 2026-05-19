@@ -5,24 +5,24 @@
 VeiculoUI::VeiculoUI(VeiculoController& ctrl) : m_ctrl(ctrl) {}
 
 void VeiculoUI::criarVeiculo() {
-    std::cout << "\n=== Criar Veículo ===\n";
+    std::cout << "\n=== Criar Veiculo ===\n";
     std::string modelo    = Menu::lerString("Modelo");
-    std::string matricula = Menu::lerString("Matrícula");
+    std::string matricula = Menu::lerString("Matricula");
     int         ano       = Menu::lerInt("Ano");
 
     if (m_ctrl.criarVeiculo(modelo, matricula, ano))
-        std::cout << "  [OK] Veículo criado com sucesso.\n";
+        std::cout << "  [OK] Veiculo criado com sucesso.\n";
     else
-        std::cout << "  [ERRO] Não foi possível criar o veículo.\n";
+        std::cout << "  [ERRO] Nao foi possivel criar o veiculo.\n";
 
     Menu::pausar();
 }
 
 void VeiculoUI::listarVeiculos() {
-    std::cout << "\n=== Lista de Veículos ===\n";
+    std::cout << "\n=== Lista de Veiculos ===\n";
     auto veiculos = m_ctrl.obterTodos();
     if (veiculos.empty()) {
-        std::cout << "  Sem veículos registados.\n";
+        std::cout << "  Sem veiculos registados.\n";
     } else {
         Menu::separador();
         for (const auto& v : veiculos)

@@ -14,7 +14,7 @@ bool EquipaController::criarEquipa(const std::string& nome,
                                     const std::string& pais)
 {
     if (nome.empty() || pais.empty()) {
-        std::cerr << "[EquipaController] Dados inválidos: campos vazios.\n";
+        std::cerr << "[EquipaController] Dados invalidos: campos vazios.\n";
         return false;
     }
     m_equipas.emplace_back(m_nextId++, nome, pais);

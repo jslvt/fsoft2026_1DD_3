@@ -16,11 +16,11 @@ bool PilotoController::criarPiloto(const std::string& nome,
                                     const std::string& nLicenca)
 {
     if (nome.empty() || dataNasc.empty() || nLicenca.empty()) {
-        std::cerr << "[PilotoController] Dados inválidos: campos vazios.\n";
+        std::cerr << "[PilotoController] Dados invalidos: campos vazios.\n";
         return false;
     }
     if (licencaExiste(nLicenca)) {
-        std::cerr << "[PilotoController] Número de licença já existe: "
+        std::cerr << "[PilotoController] Numero de licenca ja existe: "
                   << nLicenca << "\n";
         return false;
     }

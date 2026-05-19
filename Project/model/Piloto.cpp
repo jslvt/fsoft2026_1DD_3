@@ -21,6 +21,6 @@ void Piloto::print() const {
               << "[" << std::setw(3) << m_id << "] "
               << std::setw(30) << m_nome
               << "  Nasc: " << std::setw(12) << m_dataNasc
-              << "  Licença: " << m_nLicenca
+              << "  Licenca: " << m_nLicenca
               << "\n";
 }

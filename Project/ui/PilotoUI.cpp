@@ -8,12 +8,12 @@ void PilotoUI::criarPiloto() {
     std::cout << "\n=== Criar Piloto ===\n";
     std::string nome     = Menu::lerString("Nome");
     std::string dataNasc = Menu::lerString("Data de Nascimento (DD/MM/AAAA)");
-    std::string nLicenca = Menu::lerString("Número de Licença");
+    std::string nLicenca = Menu::lerString("Numero de Licenca");
 
     if (m_ctrl.criarPiloto(nome, dataNasc, nLicenca))
         std::cout << "  [OK] Piloto criado com sucesso.\n";
     else
-        std::cout << "  [ERRO] Não foi possível criar o piloto.\n";
+        std::cout << "  [ERRO] Nao foi possivel criar o piloto.\n";
 
     Menu::pausar();
 }
