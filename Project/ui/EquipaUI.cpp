@@ -7,7 +7,7 @@ EquipaUI::EquipaUI(EquipaController& ctrl) : m_ctrl(ctrl) {}
 void EquipaUI::criarEquipa() {
     std::cout << "\n=== Criar Equipa ===\n";
     std::string nome = Menu::lerString("Nome da Equipa");
-    std::string pais = Menu::lerString("País");
+    std::string pais = Menu::lerString("Pais");
 
     if (m_ctrl.criarEquipa(nome, pais))
         std::cout << "  [OK] Equipa criada com sucesso.\n";
