@@ -1,6 +1,9 @@
 # CLion / IntelliJ
 .idea/
 
+# Docx
+*.docx
+
 # CMake build output
 cmake-build-debug/
 cmake-build-release/
