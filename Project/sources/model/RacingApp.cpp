@@ -1,4 +1,5 @@
-#include "../../headers/model/RacingApp.h"
+#include "RacingApp.h"
 
-PilotoContainer& RacingApp::getPilotoContainer() { return m_pilotos; }
-EquipaContainer& RacingApp::getEquipaContainer() { return m_equipas; }
+PilotoContainer&  RacingApp::getPilotoContainer()  { return m_pilotos;  }
+EquipaContainer&  RacingApp::getEquipaContainer()  { return m_equipas;  }
+VeiculoContainer& RacingApp::getVeiculoContainer() { return m_veiculos; }
