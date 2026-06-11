@@ -4,43 +4,55 @@ project(GestaoAutomobilismo)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# ── Shared sources (everything except main.cpp) ───────────────────────────────
-file(GLOB_RECURSE LIB_SOURCES
-        "model/*.cpp"
-        "store/*.cpp"
-        "controller/*.cpp"
-        "ui/*.cpp"
+# ── Include directories ────────────────────────────────────────────────────────
+include_directories(
+        ${CMAKE_SOURCE_DIR}/headers/model
+        ${CMAKE_SOURCE_DIR}/headers/dto
+        ${CMAKE_SOURCE_DIR}/headers/exceptions
+        ${CMAKE_SOURCE_DIR}/headers/mappers
+        ${CMAKE_SOURCE_DIR}/headers/repo
+        ${CMAKE_SOURCE_DIR}/headers/services
+        ${CMAKE_SOURCE_DIR}/headers/views
+        ${CMAKE_SOURCE_DIR}/headers/controllers
 )
 
-# ── Main application ──────────────────────────────────────────────────────────
-add_executable(GestaoAutomobilismo main.cpp ${LIB_SOURCES})
-
-target_include_directories(GestaoAutomobilismo PRIVATE
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/model
-        ${CMAKE_SOURCE_DIR}/store
-        ${CMAKE_SOURCE_DIR}/controller
-        ${CMAKE_SOURCE_DIR}/ui
+# ── Sources ────────────────────────────────────────────────────────────────────
+file(GLOB_RECURSE SOURCES
+        "main.cpp"
+        "sources/**/*.cpp"
 )
 
-# Ensure the data/ folder exists next to the binary at runtime
+add_executable(GestaoAutomobilismo ${SOURCES}
+        sources/views/view.cpp
+        headers/views/view.h
+        sources/views/Utils.cpp
+        headers/views/Utils.h
+        sources/views/PilotoView.cpp
+        headers/views/PilotoView.h
+        headers/dto/PilotoInDTO.h
+        headers/dto/PilotoOutDTO.h
+        sources/services/PilotoService.cpp
+        headers/services/PilotoService.h
+        sources/repo/RacingRepositoryBin.cpp
+        headers/repo/RacingRepositoryBin.h
+        headers/repo/IRacingRepository.h
+        sources/model/RacingApp.cpp
+        headers/model/RacingApp.h
+        sources/model/PilotoContainer.cpp
+        headers/model/PilotoContainer.h
+        sources/model/Piloto.cpp
+        headers/model/Piloto.h
+        sources/mappers/PilotoMapper.cpp
+        headers/mappers/PilotoMapper.h
+        sources/controllers/Controller.cpp
+        headers/controllers/Controller.h
+        headers/exceptions/InvalidDataException.h
+        headers/exceptions/NoDataException.h
+        headers/exceptions/DuplicatedDataException.h
+        headers/exceptions/DataConsistencyException.h)
+
+# Ensure data/ folder exists next to the binary
 add_custom_command(TARGET GestaoAutomobilismo POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory
         $<TARGET_FILE_DIR:GestaoAutomobilismo>/data
-)
-
-# ── Test application ──────────────────────────────────────────────────────────
-file(GLOB TESTER_SOURCES
-        "../ProjectTester/test_main.cpp"
-        "../ProjectTester/sources/*.cpp"
-)
-
-add_executable(ProjectTester ${TESTER_SOURCES} ${LIB_SOURCES})
-
-target_include_directories(ProjectTester PRIVATE
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/model
-        ${CMAKE_SOURCE_DIR}/store
-        ${CMAKE_SOURCE_DIR}/controller
-        ${CMAKE_SOURCE_DIR}/ui
 )
