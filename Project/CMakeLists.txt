@@ -49,7 +49,18 @@ add_executable(GestaoAutomobilismo ${SOURCES}
         headers/exceptions/InvalidDataException.h
         headers/exceptions/NoDataException.h
         headers/exceptions/DuplicatedDataException.h
-        headers/exceptions/DataConsistencyException.h)
+        headers/exceptions/DataConsistencyException.h
+        headers/model/Equipa.h
+        headers/model/EquipaContainer.h
+        headers/dto/EquipaInDTO.h
+        headers/dto/EquipaOutDTO.h
+        headers/mappers/EquipaMapper.h
+        headers/services/EquipaService.h
+        sources/model/EquipaContainer.cpp
+        sources/mappers/EquipaMapper.cpp
+        sources/services/EquipaService.cpp
+        sources/views/EquipaView.cpp
+)
 
 # Ensure data/ folder exists next to the binary
 add_custom_command(TARGET GestaoAutomobilismo POST_BUILD

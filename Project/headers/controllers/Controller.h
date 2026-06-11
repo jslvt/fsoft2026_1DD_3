@@ -2,17 +2,22 @@
 #include "View.h"
 #include "PilotoView.h"
 #include "PilotoService.h"
-// EquipaService, VeiculoService, etc. — added in later iterations
+#include "EquipaView.h"
+#include "EquipaService.h"
 
 class Controller {
 private:
-    View         m_view;
-    PilotoView   m_pilotoView;
+    View          m_view;
+    PilotoView    m_pilotoView;
     PilotoService* m_pilotoService;
+    EquipaView    m_equipaView;
+    EquipaService* m_equipaService;
 
     void runPilotos();
+    void runEquipas();
 
 public:
-    explicit Controller(PilotoService* pilotoService);
+    Controller(PilotoService* pilotoService,
+               EquipaService* equipaService);
     void run();
 };

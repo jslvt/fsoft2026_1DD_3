@@ -1,24 +1,23 @@
 #include <iostream>
 #include "RacingRepositoryBin.h"
 #include "PilotoService.h"
+#include "EquipaService.h"
 #include "Controller.h"
 using namespace std;
 
 int main() {
-    // Repository — singleton, loads data from disk on creation
     RacingRepositoryBin* repo = RacingRepositoryBin::getInstance("data");
 
-    // Services — each receives the repo by pointer
     PilotoService* pilotoService = new PilotoService(repo);
+    EquipaService* equipaService = new EquipaService(repo);
 
-    // Controller — owns the run loop
-    Controller controller(pilotoService);
+    Controller controller(pilotoService, equipaService);
     controller.run();
 
     cout << "\nAte logo!\n";
 
-    // Cleanup
     delete pilotoService;
+    delete equipaService;
     delete repo;
 
     return 0;
