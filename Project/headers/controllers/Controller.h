@@ -6,6 +6,8 @@
 #include "EquipaService.h"
 #include "VeiculoView.h"
 #include "VeiculoService.h"
+#include "CorridaView.h"
+#include "CorridaService.h"
 
 class Controller {
 private:
@@ -16,14 +18,18 @@ private:
     EquipaService*  m_equipaService;
     VeiculoView     m_veiculoView;
     VeiculoService* m_veiculoService;
+    CorridaView     m_corridaView;
+    CorridaService* m_corridaService;
 
     void runPilotos();
     void runEquipas();
     void runVeiculos();
+    void runCorridas();
 
 public:
     Controller(PilotoService*  pilotoService,
                EquipaService*  equipaService,
-               VeiculoService* veiculoService);
+               VeiculoService* veiculoService,
+               CorridaService* corridaService);
     void run();
 };

@@ -60,6 +60,19 @@ add_executable(GestaoAutomobilismo ${SOURCES}
         sources/mappers/EquipaMapper.cpp
         sources/services/EquipaService.cpp
         sources/views/EquipaView.cpp
+        headers/model/TipoCorrida.h
+        headers/model/Corrida.h
+        headers/model/CorridaContainer.h
+        headers/dto/CorridaInDTO.h
+        headers/dto/CorridaOutDTO.h
+        headers/mappers/CorridaMapper.h
+        headers/services/CorridaService.h
+        headers/views/CorridaView.h
+        sources/model/Corrida.cpp
+        sources/model/CorridaContainer.cpp
+        sources/mappers/CorridaMapper.cpp
+        sources/services/CorridaService.cpp
+        sources/views/CorridaView.cpp
 )
 
 # Ensure data/ folder exists next to the binary
