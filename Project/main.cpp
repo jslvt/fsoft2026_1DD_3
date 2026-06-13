@@ -1,11 +1,12 @@
 #include <iostream>
-#include "RacingRepositoryBin.h"
-#include "PilotoService.h"
-#include "EquipaService.h"
-#include "VeiculoService.h"
-#include "CorridaService.h"
-#include "ParticipacaoService.h"
-#include "Controller.h"
+#include "headers/repo/RacingRepositoryBin.h"
+#include "headers/services/PilotoService.h"
+#include "headers/services/EquipaService.h"
+#include "headers/services/VeiculoService.h"
+#include "headers/services/CorridaService.h"
+#include "headers/services/ParticipacaoService.h"
+#include "headers/controllers/Controller.h"
+
 using namespace std;
 
 int main() {
