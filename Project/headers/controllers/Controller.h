@@ -10,6 +10,8 @@
 #include "CorridaService.h"
 #include "ParticipacaoView.h"
 #include "ParticipacaoService.h"
+#include "CampeonatoView.h"
+#include "CampeonatoService.h"
 
 class Controller {
 private:
@@ -24,18 +26,22 @@ private:
     CorridaService*      m_corridaService;
     ParticipacaoView     m_participacaoView;
     ParticipacaoService* m_participacaoService;
+    CampeonatoView       m_campeonatoView;
+    CampeonatoService*   m_campeonatoService;
 
     void runPilotos();
     void runEquipas();
     void runVeiculos();
     void runCorridas();
     void runParticipacoes();
+    void runCampeonatos();
 
 public:
     Controller(PilotoService*       pilotoService,
                EquipaService*       equipaService,
                VeiculoService*      veiculoService,
                CorridaService*      corridaService,
-               ParticipacaoService* participacaoService);
+               ParticipacaoService* participacaoService,
+               CampeonatoService*   campeonatoService);
     void run();
 };

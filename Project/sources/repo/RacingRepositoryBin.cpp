@@ -19,6 +19,7 @@ RacingRepositoryBin::RacingRepositoryBin(const string& dataDir) : m_dataDir(data
     loadVeiculos();
     loadCorridas();
     loadParticipacoes();
+    loadCampeonatos();
 }
 
 RacingApp* RacingRepositoryBin::getModel()  { return &m_model; }
@@ -29,6 +30,7 @@ void RacingRepositoryBin::persist() {
     saveVeiculos();
     saveCorridas();
     saveParticipacoes();
+    saveCampeonatos();
 }
 
 // ── Binary helpers ────────────────────────────────────────────────────────────
@@ -191,13 +193,59 @@ void RacingRepositoryBin::saveParticipacoes() {
     ofstream out(path, ios::binary | ios::trunc);
     if (!out) { cerr << "[Repo] Cannot open " << path << "\n"; return; }
     ParticipacaoContainer& c = m_model.getParticipacaoContainer();
-    list<Participacao*> participacoes = c.getAll();
-    writePOD(out, participacoes.size());
-    for (Participacao* p : participacoes) {
-        writePOD(out, p->getPilotoId());
-        writePOD(out, p->getCorridaId());
-        writePOD(out, p->getPosicao());
-        writePOD(out, p->getTempo());
+    list<Participacao*> parts = c.getAll();
+    writePOD(out, parts.size());
+    for (Participacao* p : parts) {
+        writePOD(out, p->getPilotoId()); writePOD(out, p->getCorridaId());
+        writePOD(out, p->getPosicao()); writePOD(out, p->getTempo());
         writePOD(out, p->getPontos());
+    }
+}
+
+// ── Campeonatos ───────────────────────────────────────────────────────────────
+
+void RacingRepositoryBin::loadCampeonatos() {
+    string path = m_dataDir + "/campeonatos.bin";
+    ifstream in(path, ios::binary); if (!in) return;
+    CampeonatoContainer& c = m_model.getCampeonatoContainer();
+    int nextId = readPOD<int>(in); size_t count = readPOD<size_t>(in);
+    for (size_t i = 0; i < count; ++i) {
+        int    id   = readPOD<int>(in);
+        string nome = readStr(in);
+        int    ano  = readPOD<int>(in);
+
+        size_t nCorridas = readPOD<size_t>(in);
+        list<int> corridaIds;
+        for (size_t j = 0; j < nCorridas; ++j)
+            corridaIds.push_back(readPOD<int>(in));
+
+        size_t nEquipas = readPOD<size_t>(in);
+        list<int> equipaIds;
+        for (size_t j = 0; j < nEquipas; ++j)
+            equipaIds.push_back(readPOD<int>(in));
+
+        c.restore(id, nome, ano, corridaIds, equipaIds);
+    }
+    c.setNextId(nextId);
+}
+void RacingRepositoryBin::saveCampeonatos() {
+    string path = m_dataDir + "/campeonatos.bin";
+    ofstream out(path, ios::binary | ios::trunc);
+    if (!out) { cerr << "[Repo] Cannot open " << path << "\n"; return; }
+    CampeonatoContainer& c = m_model.getCampeonatoContainer();
+    list<Campeonato*> campeonatos = c.getAll();
+    writePOD(out, c.getNextId()); writePOD(out, campeonatos.size());
+    for (Campeonato* cp : campeonatos) {
+        writePOD(out, cp->getId());
+        writeStr(out, cp->getNome());
+        writePOD(out, cp->getAno());
+
+        const list<int>& cids = cp->getCorridaIds();
+        writePOD(out, cids.size());
+        for (int cid : cids) writePOD(out, cid);
+
+        const list<int>& eids = cp->getEquipaIds();
+        writePOD(out, eids.size());
+        for (int eid : eids) writePOD(out, eid);
     }
 }

@@ -4,6 +4,7 @@
 #include "VeiculoContainer.h"
 #include "CorridaContainer.h"
 #include "ParticipacaoContainer.h"
+#include "CampeonatoContainer.h"
 
 class RacingApp {
 private:
@@ -12,6 +13,7 @@ private:
     VeiculoContainer      m_veiculos;
     CorridaContainer      m_corridas;
     ParticipacaoContainer m_participacoes;
+    CampeonatoContainer   m_campeonatos;
 
 public:
     RacingApp() = default;
@@ -21,4 +23,5 @@ public:
     VeiculoContainer&      getVeiculoContainer();
     CorridaContainer&      getCorridaContainer();
     ParticipacaoContainer& getParticipacaoContainer();
+    CampeonatoContainer&   getCampeonatoContainer();
 };

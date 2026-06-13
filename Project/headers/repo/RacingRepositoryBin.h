@@ -16,6 +16,7 @@ private:
     void loadVeiculos();       void saveVeiculos();
     void loadCorridas();       void saveCorridas();
     void loadParticipacoes();  void saveParticipacoes();
+    void loadCampeonatos();    void saveCampeonatos();
 
 public:
     static RacingRepositoryBin* getInstance(const string& dataDir = "data");

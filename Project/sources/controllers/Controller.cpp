@@ -6,12 +6,14 @@ Controller::Controller(PilotoService*       pilotoService,
                        EquipaService*       equipaService,
                        VeiculoService*      veiculoService,
                        CorridaService*      corridaService,
-                       ParticipacaoService* participacaoService)
+                       ParticipacaoService* participacaoService,
+                       CampeonatoService*   campeonatoService)
     : m_pilotoService(pilotoService),
       m_equipaService(equipaService),
       m_veiculoService(veiculoService),
       m_corridaService(corridaService),
-      m_participacaoService(participacaoService) {}
+      m_participacaoService(participacaoService),
+      m_campeonatoService(campeonatoService) {}
 
 void Controller::run() {
     int op;
@@ -23,6 +25,7 @@ void Controller::run() {
             case 3: runVeiculos();      break;
             case 4: runCorridas();      break;
             case 5: runParticipacoes(); break;
+            case 6: runCampeonatos();   break;
             default: break;
         }
     } while (op != 0);
@@ -170,14 +173,61 @@ void Controller::runParticipacoes() {
                           list<ParticipacaoOutDTO> dtos;
                           m_participacaoService->getByPiloto(pId, dtos);
                           m_participacaoView.printParticipacoes(dtos); break; }
-                case 4: { auto classificacao = m_participacaoService->getClassificacaoGeral();
-                          m_participacaoView.printClassificacaoGeral(classificacao); break; }
+                case 4: { auto cl = m_participacaoService->getClassificacaoGeral();
+                          m_participacaoView.printClassificacaoGeral(cl); break; }
                 case 5: { int pId = m_participacaoView.getPilotoId();
                           int cId = m_participacaoView.getCorridaId();
                           m_participacaoService->remove(pId, cId);
                           m_view.printMessage("Resultado removido com sucesso."); break; }
                 case 6: { m_participacaoService->update(m_participacaoView.getParticipacao());
                           m_view.printMessage("Resultado atualizado com sucesso."); break; }
+                default: break;
+            }
+        } catch (const exception& e) { m_view.printError(e.what()); }
+        if (op != 0) m_view.pausar();
+    } while (op != 0);
+}
+
+// ── Campeonatos ───────────────────────────────────────────────────────────────
+
+void Controller::runCampeonatos() {
+    int op;
+    do {
+        op = m_campeonatoView.menuCampeonatos();
+        try {
+            switch (op) {
+                case 1: { m_campeonatoService->add(m_campeonatoView.getCampeonato());
+                          m_view.printMessage("Campeonato adicionado com sucesso."); break; }
+                case 2: { int id = m_campeonatoView.getId(); CampeonatoOutDTO dto;
+                          m_campeonatoService->get(id, dto);
+                          m_campeonatoView.printCampeonato(dto); break; }
+                case 3: { m_campeonatoService->remove(m_campeonatoView.getId());
+                          m_view.printMessage("Campeonato removido com sucesso."); break; }
+                case 4: { int id = m_campeonatoView.getId();
+                          m_campeonatoService->update(id, m_campeonatoView.getCampeonato());
+                          m_view.printMessage("Campeonato atualizado com sucesso."); break; }
+                case 5: { list<CampeonatoOutDTO> dtos; m_campeonatoService->getAll(dtos);
+                          m_campeonatoView.printCampeonatos(dtos); break; }
+                case 6: { int campId = m_campeonatoView.getId();
+                          int corId  = m_campeonatoView.getCorridaId();
+                          m_campeonatoService->addCorrida(campId, corId);
+                          m_view.printMessage("Corrida adicionada ao campeonato."); break; }
+                case 7: { int campId = m_campeonatoView.getId();
+                          int corId  = m_campeonatoView.getCorridaId();
+                          m_campeonatoService->removeCorrida(campId, corId);
+                          m_view.printMessage("Corrida removida do campeonato."); break; }
+                case 8: { int campId = m_campeonatoView.getId();
+                          int eqId   = m_campeonatoView.getEquipaId();
+                          m_campeonatoService->addEquipa(campId, eqId);
+                          m_view.printMessage("Equipa inscrita no campeonato."); break; }
+                case 9: { int campId = m_campeonatoView.getId();
+                          int eqId   = m_campeonatoView.getEquipaId();
+                          m_campeonatoService->removeEquipa(campId, eqId);
+                          m_view.printMessage("Equipa removida do campeonato."); break; }
+                case 10: { int id = m_campeonatoView.getId();
+                           CampeonatoOutDTO dto; m_campeonatoService->get(id, dto);
+                           auto cl = m_campeonatoService->getClassificacao(id);
+                           m_campeonatoView.printClassificacao(id, dto.nome, cl); break; }
                 default: break;
             }
         } catch (const exception& e) { m_view.printError(e.what()); }

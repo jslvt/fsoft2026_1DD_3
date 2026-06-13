@@ -1,12 +1,12 @@
 #include <iostream>
-#include "headers/repo/RacingRepositoryBin.h"
-#include "headers/services/PilotoService.h"
-#include "headers/services/EquipaService.h"
-#include "headers/services/VeiculoService.h"
-#include "headers/services/CorridaService.h"
-#include "headers/services/ParticipacaoService.h"
-#include "headers/controllers/Controller.h"
-
+#include "RacingRepositoryBin.h"
+#include "PilotoService.h"
+#include "EquipaService.h"
+#include "VeiculoService.h"
+#include "CorridaService.h"
+#include "ParticipacaoService.h"
+#include "CampeonatoService.h"
+#include "Controller.h"
 using namespace std;
 
 int main() {
@@ -17,10 +17,11 @@ int main() {
     VeiculoService*      veiculoService      = new VeiculoService(repo);
     CorridaService*      corridaService      = new CorridaService(repo);
     ParticipacaoService* participacaoService = new ParticipacaoService(repo);
+    CampeonatoService*   campeonatoService   = new CampeonatoService(repo);
 
     Controller controller(pilotoService, equipaService,
                           veiculoService, corridaService,
-                          participacaoService);
+                          participacaoService, campeonatoService);
     controller.run();
 
     cout << "\nAte logo!\n";
@@ -30,6 +31,7 @@ int main() {
     delete veiculoService;
     delete corridaService;
     delete participacaoService;
+    delete campeonatoService;
     delete repo;
 
     return 0;
