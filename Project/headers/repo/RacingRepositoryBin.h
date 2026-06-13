@@ -11,10 +11,11 @@ private:
     static RacingRepositoryBin* s_instance;
     explicit RacingRepositoryBin(const string& dataDir);
 
-    void loadPilotos();   void savePilotos();
-    void loadEquipas();   void saveEquipas();
-    void loadVeiculos();  void saveVeiculos();
-    void loadCorridas();  void saveCorridas();
+    void loadPilotos();        void savePilotos();
+    void loadEquipas();        void saveEquipas();
+    void loadVeiculos();       void saveVeiculos();
+    void loadCorridas();       void saveCorridas();
+    void loadParticipacoes();  void saveParticipacoes();
 
 public:
     static RacingRepositoryBin* getInstance(const string& dataDir = "data");

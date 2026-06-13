@@ -4,8 +4,6 @@
 #include <iostream>
 using namespace std;
 
-// ── Singleton ─────────────────────────────────────────────────────────────────
-
 RacingRepositoryBin* RacingRepositoryBin::s_instance = nullptr;
 
 RacingRepositoryBin* RacingRepositoryBin::getInstance(const string& dataDir) {
@@ -14,14 +12,13 @@ RacingRepositoryBin* RacingRepositoryBin::getInstance(const string& dataDir) {
     return s_instance;
 }
 
-RacingRepositoryBin::RacingRepositoryBin(const string& dataDir)
-    : m_dataDir(dataDir)
-{
+RacingRepositoryBin::RacingRepositoryBin(const string& dataDir) : m_dataDir(dataDir) {
     filesystem::create_directories(m_dataDir);
     loadPilotos();
     loadEquipas();
     loadVeiculos();
     loadCorridas();
+    loadParticipacoes();
 }
 
 RacingApp* RacingRepositoryBin::getModel()  { return &m_model; }
@@ -31,6 +28,7 @@ void RacingRepositoryBin::persist() {
     saveEquipas();
     saveVeiculos();
     saveCorridas();
+    saveParticipacoes();
 }
 
 // ── Binary helpers ────────────────────────────────────────────────────────────
@@ -60,8 +58,7 @@ template<typename T> static T readPOD(ifstream& in) {
 
 void RacingRepositoryBin::loadPilotos() {
     string path = m_dataDir + "/pilotos.bin";
-    ifstream in(path, ios::binary);
-    if (!in) return;
+    ifstream in(path, ios::binary); if (!in) return;
     PilotoContainer& c = m_model.getPilotoContainer();
     int nextId = readPOD<int>(in); size_t count = readPOD<size_t>(in);
     for (size_t i = 0; i < count; ++i) {
@@ -71,7 +68,6 @@ void RacingRepositoryBin::loadPilotos() {
     }
     c.setNextId(nextId);
 }
-
 void RacingRepositoryBin::savePilotos() {
     string path = m_dataDir + "/pilotos.bin";
     ofstream out(path, ios::binary | ios::trunc);
@@ -89,8 +85,7 @@ void RacingRepositoryBin::savePilotos() {
 
 void RacingRepositoryBin::loadEquipas() {
     string path = m_dataDir + "/equipas.bin";
-    ifstream in(path, ios::binary);
-    if (!in) return;
+    ifstream in(path, ios::binary); if (!in) return;
     EquipaContainer& c = m_model.getEquipaContainer();
     int nextId = readPOD<int>(in); size_t count = readPOD<size_t>(in);
     for (size_t i = 0; i < count; ++i) {
@@ -102,7 +97,6 @@ void RacingRepositoryBin::loadEquipas() {
     }
     c.setNextId(nextId);
 }
-
 void RacingRepositoryBin::saveEquipas() {
     string path = m_dataDir + "/equipas.bin";
     ofstream out(path, ios::binary | ios::trunc);
@@ -122,8 +116,7 @@ void RacingRepositoryBin::saveEquipas() {
 
 void RacingRepositoryBin::loadVeiculos() {
     string path = m_dataDir + "/veiculos.bin";
-    ifstream in(path, ios::binary);
-    if (!in) return;
+    ifstream in(path, ios::binary); if (!in) return;
     VeiculoContainer& c = m_model.getVeiculoContainer();
     int nextId = readPOD<int>(in); size_t count = readPOD<size_t>(in);
     for (size_t i = 0; i < count; ++i) {
@@ -134,7 +127,6 @@ void RacingRepositoryBin::loadVeiculos() {
     }
     c.setNextId(nextId);
 }
-
 void RacingRepositoryBin::saveVeiculos() {
     string path = m_dataDir + "/veiculos.bin";
     ofstream out(path, ios::binary | ios::trunc);
@@ -153,22 +145,17 @@ void RacingRepositoryBin::saveVeiculos() {
 
 void RacingRepositoryBin::loadCorridas() {
     string path = m_dataDir + "/corridas.bin";
-    ifstream in(path, ios::binary);
-    if (!in) return;
+    ifstream in(path, ios::binary); if (!in) return;
     CorridaContainer& c = m_model.getCorridaContainer();
     int nextId = readPOD<int>(in); size_t count = readPOD<size_t>(in);
     for (size_t i = 0; i < count; ++i) {
-        int         id           = readPOD<int>(in);
-        string      nome         = readStr(in);
-        string      circuito     = readStr(in);
-        string      data         = readStr(in);
-        TipoCorrida tipo         = readPOD<TipoCorrida>(in);
-        int         campeonatoId = readPOD<int>(in);
+        int id = readPOD<int>(in); string nome = readStr(in);
+        string circuito = readStr(in); string data = readStr(in);
+        TipoCorrida tipo = readPOD<TipoCorrida>(in); int campeonatoId = readPOD<int>(in);
         c.restore(id, nome, circuito, data, tipo, campeonatoId);
     }
     c.setNextId(nextId);
 }
-
 void RacingRepositoryBin::saveCorridas() {
     string path = m_dataDir + "/corridas.bin";
     ofstream out(path, ios::binary | ios::trunc);
@@ -177,11 +164,40 @@ void RacingRepositoryBin::saveCorridas() {
     list<Corrida*> corridas = c.getAll();
     writePOD(out, c.getNextId()); writePOD(out, corridas.size());
     for (Corrida* cr : corridas) {
-        writePOD(out, cr->getId());
-        writeStr(out, cr->getNome());
-        writeStr(out, cr->getCircuito());
-        writeStr(out, cr->getData());
-        writePOD(out, cr->getTipo());
-        writePOD(out, cr->getCampeonatoId());
+        writePOD(out, cr->getId()); writeStr(out, cr->getNome());
+        writeStr(out, cr->getCircuito()); writeStr(out, cr->getData());
+        writePOD(out, cr->getTipo()); writePOD(out, cr->getCampeonatoId());
+    }
+}
+
+// ── Participacoes ─────────────────────────────────────────────────────────────
+
+void RacingRepositoryBin::loadParticipacoes() {
+    string path = m_dataDir + "/participacoes.bin";
+    ifstream in(path, ios::binary); if (!in) return;
+    ParticipacaoContainer& c = m_model.getParticipacaoContainer();
+    size_t count = readPOD<size_t>(in);
+    for (size_t i = 0; i < count; ++i) {
+        int   pilotoId  = readPOD<int>(in);
+        int   corridaId = readPOD<int>(in);
+        int   posicao   = readPOD<int>(in);
+        float tempo     = readPOD<float>(in);
+        int   pontos    = readPOD<int>(in);
+        c.restore(pilotoId, corridaId, posicao, tempo, pontos);
+    }
+}
+void RacingRepositoryBin::saveParticipacoes() {
+    string path = m_dataDir + "/participacoes.bin";
+    ofstream out(path, ios::binary | ios::trunc);
+    if (!out) { cerr << "[Repo] Cannot open " << path << "\n"; return; }
+    ParticipacaoContainer& c = m_model.getParticipacaoContainer();
+    list<Participacao*> participacoes = c.getAll();
+    writePOD(out, participacoes.size());
+    for (Participacao* p : participacoes) {
+        writePOD(out, p->getPilotoId());
+        writePOD(out, p->getCorridaId());
+        writePOD(out, p->getPosicao());
+        writePOD(out, p->getTempo());
+        writePOD(out, p->getPontos());
     }
 }

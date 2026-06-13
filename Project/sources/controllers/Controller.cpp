@@ -2,24 +2,27 @@
 #include <iostream>
 using namespace std;
 
-Controller::Controller(PilotoService*  pilotoService,
-                       EquipaService*  equipaService,
-                       VeiculoService* veiculoService,
-                       CorridaService* corridaService)
+Controller::Controller(PilotoService*       pilotoService,
+                       EquipaService*       equipaService,
+                       VeiculoService*      veiculoService,
+                       CorridaService*      corridaService,
+                       ParticipacaoService* participacaoService)
     : m_pilotoService(pilotoService),
       m_equipaService(equipaService),
       m_veiculoService(veiculoService),
-      m_corridaService(corridaService) {}
+      m_corridaService(corridaService),
+      m_participacaoService(participacaoService) {}
 
 void Controller::run() {
     int op;
     do {
         op = m_view.menuPrincipal();
         switch (op) {
-            case 1: runPilotos();  break;
-            case 2: runEquipas();  break;
-            case 3: runVeiculos(); break;
-            case 4: runCorridas(); break;
+            case 1: runPilotos();       break;
+            case 2: runEquipas();       break;
+            case 3: runVeiculos();      break;
+            case 4: runCorridas();      break;
+            case 5: runParticipacoes(); break;
             default: break;
         }
     } while (op != 0);
@@ -33,8 +36,7 @@ void Controller::runPilotos() {
         op = m_pilotoView.menuPilotos();
         try {
             switch (op) {
-                case 1: { PilotoInDTO dto = m_pilotoView.getPiloto();
-                          m_pilotoService->add(dto);
+                case 1: { m_pilotoService->add(m_pilotoView.getPiloto());
                           m_view.printMessage("Piloto adicionado com sucesso."); break; }
                 case 2: { int id = m_pilotoView.getId(); PilotoOutDTO dto;
                           m_pilotoService->get(id, dto); m_pilotoView.printPiloto(dto); break; }
@@ -143,6 +145,39 @@ void Controller::runCorridas() {
                           m_view.printMessage("Corrida associada ao campeonato."); break; }
                 case 8: { m_corridaService->unassignCampeonato(m_corridaView.getId());
                           m_view.printMessage("Corrida desassociada do campeonato."); break; }
+                default: break;
+            }
+        } catch (const exception& e) { m_view.printError(e.what()); }
+        if (op != 0) m_view.pausar();
+    } while (op != 0);
+}
+
+// ── Participacoes ─────────────────────────────────────────────────────────────
+
+void Controller::runParticipacoes() {
+    int op;
+    do {
+        op = m_participacaoView.menuParticipacoes();
+        try {
+            switch (op) {
+                case 1: { m_participacaoService->add(m_participacaoView.getParticipacao());
+                          m_view.printMessage("Resultado registado com sucesso."); break; }
+                case 2: { int cId = m_participacaoView.getCorridaId();
+                          list<ParticipacaoOutDTO> dtos;
+                          m_participacaoService->getByCorrida(cId, dtos);
+                          m_participacaoView.printParticipacoes(dtos); break; }
+                case 3: { int pId = m_participacaoView.getPilotoId();
+                          list<ParticipacaoOutDTO> dtos;
+                          m_participacaoService->getByPiloto(pId, dtos);
+                          m_participacaoView.printParticipacoes(dtos); break; }
+                case 4: { auto classificacao = m_participacaoService->getClassificacaoGeral();
+                          m_participacaoView.printClassificacaoGeral(classificacao); break; }
+                case 5: { int pId = m_participacaoView.getPilotoId();
+                          int cId = m_participacaoView.getCorridaId();
+                          m_participacaoService->remove(pId, cId);
+                          m_view.printMessage("Resultado removido com sucesso."); break; }
+                case 6: { m_participacaoService->update(m_participacaoView.getParticipacao());
+                          m_view.printMessage("Resultado atualizado com sucesso."); break; }
                 default: break;
             }
         } catch (const exception& e) { m_view.printError(e.what()); }
