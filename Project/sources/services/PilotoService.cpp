@@ -1,49 +1,55 @@
 #include "PilotoService.h"
 #include "PilotoMapper.h"
 #include "RacingApp.h"
+#include "DataConsistencyException.h"
 
-PilotoService::PilotoService(IRacingRepository* repo)
-    : m_repo(repo) {}
+PilotoService::PilotoService(IRacingRepository* repo) : m_repo(repo) {}
 
 void PilotoService::add(const PilotoInDTO& dto) {
     RacingApp*       model     = m_repo->getModel();
     PilotoContainer& container = model->getPilotoContainer();
-
-    // Container throws DuplicatedDataException if licence exists
-    // Piloto constructor throws InvalidDataException if data is bad
     container.add(dto.nome, dto.dataNasc, dto.nLicenca);
-
-    // Persist immediately after every change
     m_repo->persist();
 }
 
 void PilotoService::getAll(list<PilotoOutDTO>& dtos) {
-    RacingApp*       model     = m_repo->getModel();
-    PilotoContainer& container = model->getPilotoContainer();
-    list<Piloto*>    pilotos   = container.getAll();
+    RacingApp*       model   = m_repo->getModel();
+    PilotoContainer& c       = model->getPilotoContainer();
+    list<Piloto*>    pilotos = c.getAll();
     PilotoMapper::listModel2listDTO(pilotos, dtos);
 }
 
 void PilotoService::get(int id, PilotoOutDTO& dto) {
-    RacingApp*       model     = m_repo->getModel();
-    PilotoContainer& container = model->getPilotoContainer();
-    Piloto*          piloto    = container.get(id);  // throws NoDataException
-    PilotoMapper::model2DTO(piloto, dto);
+    RacingApp*       model = m_repo->getModel();
+    PilotoContainer& c     = model->getPilotoContainer();
+    Piloto*          p     = c.get(id);
+    PilotoMapper::model2DTO(p, dto);
 }
 
 void PilotoService::remove(int id) {
-    RacingApp*       model     = m_repo->getModel();
-    PilotoContainer& container = model->getPilotoContainer();
+    RacingApp* model = m_repo->getModel();
 
-    // Future: check ParticipacaoContainer for references before removing
-    // and throw DataConsistencyException if found
-    container.remove(id);  // throws NoDataException if not found
+    // Refuse if piloto has participacoes
+    if (model->getParticipacaoContainer().hasPiloto(id))
+        throw DataConsistencyException(
+            "Piloto id=" + to_string(id) +
+            " has participacoes registered and cannot be removed");
+
+    // Refuse if piloto belongs to an equipa
+    Equipa* equipa = model->getEquipaContainer().findEquipaByPiloto(id);
+    if (equipa != nullptr)
+        throw DataConsistencyException(
+            "Piloto id=" + to_string(id) +
+            " belongs to equipa '" + equipa->getNome() +
+            "' — remove from equipa first");
+
+    model->getPilotoContainer().remove(id);
     m_repo->persist();
 }
 
 void PilotoService::update(int id, const PilotoInDTO& dto) {
-    RacingApp*       model     = m_repo->getModel();
-    PilotoContainer& container = model->getPilotoContainer();
-    container.update(id, dto.nome, dto.dataNasc, dto.nLicenca);
+    RacingApp*       model = m_repo->getModel();
+    PilotoContainer& c     = model->getPilotoContainer();
+    c.update(id, dto.nome, dto.dataNasc, dto.nLicenca);
     m_repo->persist();
 }

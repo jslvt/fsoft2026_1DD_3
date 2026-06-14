@@ -13,15 +13,15 @@ void CorridaService::add(const CorridaInDTO& dto) {
 }
 
 void CorridaService::getAll(list<CorridaOutDTO>& dtos) {
-    RacingApp*        model   = m_repo->getModel();
-    CorridaContainer& c       = model->getCorridaContainer();
+    RacingApp*        model    = m_repo->getModel();
+    CorridaContainer& c        = model->getCorridaContainer();
     list<Corrida*>    corridas = c.getAll();
     CorridaMapper::listModel2listDTO(corridas, dtos);
 }
 
 void CorridaService::getByCampeonato(int campeonatoId, list<CorridaOutDTO>& dtos) {
-    RacingApp*        model   = m_repo->getModel();
-    CorridaContainer& c       = model->getCorridaContainer();
+    RacingApp*        model    = m_repo->getModel();
+    CorridaContainer& c        = model->getCorridaContainer();
     list<Corrida*>    corridas = c.getByCampeonato(campeonatoId);
     CorridaMapper::listModel2listDTO(corridas, dtos);
 }
@@ -34,10 +34,23 @@ void CorridaService::get(int id, CorridaOutDTO& dto) {
 }
 
 void CorridaService::remove(int id) {
-    RacingApp*        model = m_repo->getModel();
-    CorridaContainer& c     = model->getCorridaContainer();
-    // Future: check ParticipacaoContainer for references
-    c.remove(id);
+    RacingApp* model = m_repo->getModel();
+
+    // Refuse if corrida has participacoes registered
+    if (model->getParticipacaoContainer().hasCorrida(id))
+        throw DataConsistencyException(
+            "Corrida id=" + to_string(id) +
+            " has participacoes registered and cannot be removed");
+
+    // Refuse if corrida belongs to a campeonato
+    Corrida* cr = model->getCorridaContainer().get(id);
+    if (cr->getCampeonatoId() != 0)
+        throw DataConsistencyException(
+            "Corrida id=" + to_string(id) +
+            " belongs to campeonato id=" + to_string(cr->getCampeonatoId()) +
+            " — remove from campeonato first");
+
+    model->getCorridaContainer().remove(id);
     m_repo->persist();
 }
 
@@ -50,7 +63,6 @@ void CorridaService::update(int id, const CorridaInDTO& dto) {
 
 void CorridaService::assignCampeonato(int corridaId, int campeonatoId) {
     RacingApp* model = m_repo->getModel();
-    // Will validate campeonato exists once CampeonatoContainer is added
     model->getCorridaContainer().assignCampeonato(corridaId, campeonatoId);
     m_repo->persist();
 }

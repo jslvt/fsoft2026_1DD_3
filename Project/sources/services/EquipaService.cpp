@@ -13,8 +13,8 @@ void EquipaService::add(const EquipaInDTO& dto) {
 }
 
 void EquipaService::getAll(list<EquipaOutDTO>& dtos) {
-    RacingApp*       model  = m_repo->getModel();
-    EquipaContainer& c      = model->getEquipaContainer();
+    RacingApp*       model   = m_repo->getModel();
+    EquipaContainer& c       = model->getEquipaContainer();
     list<Equipa*>    equipas = c.getAll();
     EquipaMapper::listModel2listDTO(equipas, dtos);
 }
@@ -22,19 +22,39 @@ void EquipaService::getAll(list<EquipaOutDTO>& dtos) {
 void EquipaService::get(int id, EquipaOutDTO& dto) {
     RacingApp*       model = m_repo->getModel();
     EquipaContainer& c     = model->getEquipaContainer();
-    Equipa*          e     = c.get(id);   // throws NoDataException
+    Equipa*          e     = c.get(id);
     EquipaMapper::model2DTO(e, dto);
 }
 
 void EquipaService::remove(int id) {
     RacingApp*       model = m_repo->getModel();
     EquipaContainer& c     = model->getEquipaContainer();
+    Equipa*          e     = c.get(id);
 
     // Refuse if equipa still has pilots
-    Equipa* e = c.get(id);
     if (!e->getPilotoIds().empty())
         throw DataConsistencyException(
-            "Equipa id=" + to_string(id) + " still has pilots assigned");
+            "Equipa id=" + to_string(id) +
+            " still has pilots assigned — remove pilots first");
+
+    // Refuse if equipa has vehicles assigned
+    list<Veiculo*> veiculos =
+        model->getVeiculoContainer().getByEquipa(id);
+    if (!veiculos.empty())
+        throw DataConsistencyException(
+            "Equipa id=" + to_string(id) +
+            " still has vehicles assigned — unassign vehicles first");
+
+    // Refuse if equipa is inscribed in a campeonato
+    list<Campeonato*> campeonatos =
+        model->getCampeonatoContainer().getAll();
+    for (auto* camp : campeonatos) {
+        if (camp->hasEquipa(id))
+            throw DataConsistencyException(
+                "Equipa id=" + to_string(id) +
+                " is inscribed in campeonato '" + camp->getNome() +
+                "' — remove from campeonato first");
+    }
 
     c.remove(id);
     m_repo->persist();
@@ -48,24 +68,18 @@ void EquipaService::update(int id, const EquipaInDTO& dto) {
 }
 
 void EquipaService::addPiloto(int equipaId, int pilotoId) {
-    RacingApp*       model = m_repo->getModel();
-
-    // Verify piloto exists — throws NoDataException if not
+    RacingApp* model = m_repo->getModel();
     model->getPilotoContainer().get(pilotoId);
-
-    // Verify piloto is not already in another equipa
     Equipa* current = model->getEquipaContainer().findEquipaByPiloto(pilotoId);
     if (current != nullptr)
         throw DataConsistencyException(
             "Piloto id=" + to_string(pilotoId) +
             " already belongs to equipa '" + current->getNome() + "'");
-
     model->getEquipaContainer().addPiloto(equipaId, pilotoId);
     m_repo->persist();
 }
 
 void EquipaService::removePiloto(int equipaId, int pilotoId) {
-    RacingApp*       model = m_repo->getModel();
-    model->getEquipaContainer().removePiloto(equipaId, pilotoId);
+    m_repo->getModel()->getEquipaContainer().removePiloto(equipaId, pilotoId);
     m_repo->persist();
 }
