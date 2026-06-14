@@ -1,3 +1,32 @@
+# ===== LaTeX =====
+
+# Ficheiros auxiliares
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.xdv
+*.tex
+
+# Pasta das imagens do relatório
+images/
+
+relatorio_gestao_pilotos_fsoft_updated.pdf
+
+# Pasta das imagens do relatório
+.vscode/
+
 # CLion / IntelliJ
 .idea/
 
