@@ -26,18 +26,13 @@ VeiculoInDTO VeiculoView::getVeiculo() {
     VeiculoInDTO dto;
     cout << "\n-- Dados do Veiculo --\n";
     dto.modelo    = Utils::getString("Modelo");
-    dto.matricula = Utils::getString("Matricula");
-    dto.ano       = Utils::getNumber("Ano");
+    dto.matricula = Utils::getMatricula("Matricula (ex: AA-00-AA)");
+    dto.ano       = Utils::getAno("Ano");
     return dto;
 }
 
-int VeiculoView::getId() {
-    return Utils::getNumber("ID do Veiculo");
-}
-
-int VeiculoView::getEquipaId() {
-    return Utils::getNumber("ID da Equipa");
-}
+int VeiculoView::getId()       { return Utils::getNumber("ID do Veiculo"); }
+int VeiculoView::getEquipaId() { return Utils::getNumber("ID da Equipa");  }
 
 void VeiculoView::printVeiculo(const VeiculoOutDTO& dto) {
     cout << left
@@ -45,21 +40,15 @@ void VeiculoView::printVeiculo(const VeiculoOutDTO& dto) {
          << setw(25) << dto.modelo
          << "  Matricula: " << setw(12) << dto.matricula
          << "  Ano: "       << setw(6)  << dto.ano;
-    if (dto.equipaId == 0)
-        cout << "  Equipa: (nenhuma)";
-    else
-        cout << "  Equipa: " << dto.equipaId;
+    if (dto.equipaId == 0) cout << "  Equipa: (nenhuma)";
+    else                   cout << "  Equipa: " << dto.equipaId;
     cout << "\n";
 }
 
 void VeiculoView::printVeiculos(list<VeiculoOutDTO>& dtos) {
-    if (dtos.empty()) {
-        cout << "  Sem veiculos registados.\n";
-        return;
-    }
+    if (dtos.empty()) { cout << "  Sem veiculos registados.\n"; return; }
     cout << "\n-- Lista de Veiculos --\n";
     cout << string(75, '-') << "\n";
-    for (auto& dto : dtos)
-        printVeiculo(dto);
+    for (auto& dto : dtos) printVeiculo(dto);
     cout << string(75, '-') << "\n";
 }

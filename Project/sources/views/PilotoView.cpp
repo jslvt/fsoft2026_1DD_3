@@ -22,9 +22,9 @@ int PilotoView::menuPilotos() {
 PilotoInDTO PilotoView::getPiloto() {
     PilotoInDTO dto;
     cout << "\n-- Dados do Piloto --\n";
-    dto.nome     = Utils::getString("Nome");
-    dto.dataNasc = Utils::getString("Data de Nascimento (DD/MM/AAAA)");
-    dto.nLicenca = Utils::getString("Numero de Licenca");
+    dto.nome     = Utils::getNome("Nome");
+    dto.dataNasc = Utils::getDate("Data de Nascimento");
+    dto.nLicenca = Utils::getLicenca("Numero de Licenca");
     return dto;
 }
 

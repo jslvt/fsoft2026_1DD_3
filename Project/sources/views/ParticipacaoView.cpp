@@ -25,8 +25,8 @@ ParticipacaoInDTO ParticipacaoView::getParticipacao() {
     cout << "\n-- Dados da Participacao --\n";
     dto.pilotoId  = Utils::getNumber("ID do Piloto");
     dto.corridaId = Utils::getNumber("ID da Corrida");
-    dto.posicao   = Utils::getNumber("Posicao final");
-    dto.tempo     = static_cast<float>(Utils::getNumber("Tempo (segundos inteiros)"));
+    dto.posicao   = Utils::getPosicao("Posicao final");
+    dto.tempo     = Utils::getTempo("Tempo (segundos, ex: 5432.5)");
     return dto;
 }
 
@@ -38,7 +38,7 @@ void ParticipacaoView::printParticipacao(const ParticipacaoOutDTO& dto) {
          << "  " << setw(4)  << dto.posicao
          << setw(28) << dto.pilotoNome
          << "  Corrida: " << setw(25) << dto.corridaNome
-         << "  Tempo: "   << setw(8)  << dto.tempo << "s"
+         << "  Tempo: "   << fixed << setprecision(3) << setw(10) << dto.tempo << "s"
          << "  Pontos: "  << dto.pontos
          << "\n";
 }
@@ -47,28 +47,20 @@ void ParticipacaoView::printParticipacoes(list<ParticipacaoOutDTO>& dtos) {
     if (dtos.empty()) { cout << "  Sem resultados.\n"; return; }
     cout << "\n" << string(85, '-') << "\n";
     cout << left << setw(6) << "  Pos" << setw(28) << "Piloto"
-         << setw(27) << "  Corrida" << setw(10) << "  Tempo"
+         << setw(27) << "  Corrida" << setw(12) << "  Tempo(s)"
          << "  Pontos\n";
     cout << string(85, '-') << "\n";
-    for (auto& dto : dtos)
-        printParticipacao(dto);
+    for (auto& dto : dtos) printParticipacao(dto);
     cout << string(85, '-') << "\n";
 }
 
-void ParticipacaoView::printClassificacaoGeral(
-    list<pair<string, int>>& classificacao)
-{
-    if (classificacao.empty()) {
-        cout << "  Sem dados de campeonato.\n";
-        return;
-    }
+void ParticipacaoView::printClassificacaoGeral(list<pair<string, int>>& classificacao) {
+    if (classificacao.empty()) { cout << "  Sem dados de campeonato.\n"; return; }
     cout << "\n-- Classificacao Geral (Campeonato) --\n";
     cout << string(45, '-') << "\n";
     int pos = 1;
-    for (auto& [nome, pontos] : classificacao) {
+    for (auto& [nome, pontos] : classificacao)
         cout << "  " << setw(3) << pos++ << ".  "
-             << setw(30) << nome
-             << "  " << pontos << " pts\n";
-    }
+             << setw(30) << nome << "  " << pontos << " pts\n";
     cout << string(45, '-') << "\n";
 }

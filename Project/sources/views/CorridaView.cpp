@@ -25,27 +25,24 @@ int CorridaView::menuCorridas() {
 CorridaInDTO CorridaView::getCorrida() {
     CorridaInDTO dto;
     cout << "\n-- Dados da Corrida --\n";
-    dto.nome     = Utils::getString("Nome");
+    dto.nome     = Utils::getNome("Nome");
     dto.circuito = Utils::getString("Circuito");
-    dto.data     = Utils::getString("Data (DD/MM/AAAA)");
+    dto.data     = Utils::getDate("Data");
 
     int tipo = -1;
     do {
         cout << "  Tipo (1 - Normal, 2 - Campeonato): ";
         tipo = Utils::getNumber("Tipo");
+        if (tipo < 1 || tipo > 2)
+            cout << "  [Erro] Opcao invalida. Escolha 1 ou 2.\n";
     } while (tipo < 1 || tipo > 2);
     dto.tipo = (tipo == 2) ? TipoCorrida::CAMPEONATO : TipoCorrida::NORMAL;
 
     return dto;
 }
 
-int CorridaView::getId() {
-    return Utils::getNumber("ID da Corrida");
-}
-
-int CorridaView::getCampeonatoId() {
-    return Utils::getNumber("ID do Campeonato");
-}
+int CorridaView::getId()           { return Utils::getNumber("ID da Corrida");    }
+int CorridaView::getCampeonatoId() { return Utils::getNumber("ID do Campeonato"); }
 
 void CorridaView::printCorrida(const CorridaOutDTO& dto) {
     cout << left
@@ -54,19 +51,14 @@ void CorridaView::printCorrida(const CorridaOutDTO& dto) {
          << "  Circuito: " << setw(20) << dto.circuito
          << "  Data: "     << setw(12) << dto.data
          << "  Tipo: "     << setw(12) << dto.tipoStr;
-    if (dto.campeonatoId != 0)
-        cout << "  Camp.: " << dto.campeonatoId;
+    if (dto.campeonatoId != 0) cout << "  Camp.: " << dto.campeonatoId;
     cout << "\n";
 }
 
 void CorridaView::printCorridas(list<CorridaOutDTO>& dtos) {
-    if (dtos.empty()) {
-        cout << "  Sem corridas registadas.\n";
-        return;
-    }
+    if (dtos.empty()) { cout << "  Sem corridas registadas.\n"; return; }
     cout << "\n-- Lista de Corridas --\n";
     cout << string(90, '-') << "\n";
-    for (auto& dto : dtos)
-        printCorrida(dto);
+    for (auto& dto : dtos) printCorrida(dto);
     cout << string(90, '-') << "\n";
 }
