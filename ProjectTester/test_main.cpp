@@ -1,11 +1,5 @@
-#include <iostream>
-#include "headers/Menu_test.h"
+#include <gtest/gtest.h>
 
-using namespace std;
-
-int main() {
-    int opcao;
-    do {
-        menu(opcao);
-    }while (opcao != 6);
-}
+// GoogleTest provides its own main via gtest_main linkage.
+// This file is intentionally empty — all tests are discovered
+// automatically from the TEST() macros in the sources/ folder.

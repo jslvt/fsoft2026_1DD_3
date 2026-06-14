@@ -1,17 +1,9 @@
 #include "Corrida.h"
+#include "Validator.h"
 #include "InvalidDataException.h"
 
-// ── Validation ────────────────────────────────────────────────────────────────
-
-bool Corrida::isNomeValid(const string& nome) {
-    return nome.length() >= 2;
-}
-
-bool Corrida::isCircuitoValid(const string& circuito) {
-    return circuito.length() >= 2;
-}
-
-// ── Constructor ───────────────────────────────────────────────────────────────
+bool Corrida::isNomeValid(const string& nome)         { return nome.length() >= 2;     }
+bool Corrida::isCircuitoValid(const string& circuito) { return circuito.length() >= 2; }
 
 Corrida::Corrida(int id, const string& nome, const string& circuito,
                  const string& data, TipoCorrida tipo, int campeonatoId) {
@@ -25,8 +17,6 @@ Corrida::Corrida(int id, const string& nome, const string& circuito,
     setData(data);
 }
 
-// ── Getters ───────────────────────────────────────────────────────────────────
-
 int           Corrida::getId()           const { return m_id;           }
 const string& Corrida::getNome()         const { return m_nome;         }
 const string& Corrida::getCircuito()     const { return m_circuito;     }
@@ -37,8 +27,6 @@ int           Corrida::getCampeonatoId() const { return m_campeonatoId; }
 string Corrida::getTipoStr() const {
     return m_tipo == TipoCorrida::CAMPEONATO ? "Campeonato" : "Normal";
 }
-
-// ── Setters ───────────────────────────────────────────────────────────────────
 
 void Corrida::setNome(const string& nome) {
     if (!isNomeValid(nome))
@@ -53,15 +41,13 @@ void Corrida::setCircuito(const string& circuito) {
 }
 
 void Corrida::setData(const string& data) {
-    if (data.empty())
-        throw InvalidDataException("Corrida data cannot be empty");
+    if (!Validator::isDateValid(data))
+        throw InvalidDataException("Corrida data: " + Validator::dateError());
     m_data = data;
 }
 
 void Corrida::setTipo(TipoCorrida tipo)         { m_tipo         = tipo;         }
 void Corrida::setCampeonatoId(int campeonatoId) { m_campeonatoId = campeonatoId; }
-
-// ── Operators ─────────────────────────────────────────────────────────────────
 
 bool Corrida::operator==(int id)             const { return m_id == id;       }
 bool Corrida::operator==(const Corrida& obj) const { return m_id == obj.m_id; }
