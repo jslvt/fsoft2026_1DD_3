@@ -1,0 +1,35 @@
+@startuml
+title SSD: UC15 - Adicionar Corrida ao Campeonato
+
+actor Utilizador
+participant ":Controller" as C
+participant ":CampeonatoView" as V
+participant ":CampeonatoService" as S
+participant ":CorridaContainer" as CC
+participant ":CampeonatoContainer" as CAC
+
+Utilizador -> C : seleciona "Campeonatos > Adicionar corrida"
+C -> V : getId()
+V --> C : campeonatoId
+C -> V : getCorridaId()
+V --> C : corridaId
+C -> S : addCorrida(campeonatoId, corridaId)
+S -> CC : get(corridaId)
+
+alt corrida não existe
+  CC --> S : throws NoDataException
+  S --> C : throws NoDataException
+  C -> V : printError(msg)
+else corrida já no campeonato
+  S -> CAC : addCorrida(campeonatoId, corridaId)
+  CAC --> S : throws DuplicatedDataException
+  S --> C : throws DuplicatedDataException
+  C -> V : printError(msg)
+else sucesso
+  CAC --> S : ok
+  S -> CC : assignCampeonato(corridaId, campeonatoId)
+  S -> S : repo.persist()
+  S --> C : ok
+  C -> V : printMessage("Corrida adicionada ao campeonato.")
+end
+@enduml

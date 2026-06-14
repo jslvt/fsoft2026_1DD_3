@@ -1,0 +1,30 @@
+@startuml
+title SSD: UC4 - Remover Piloto
+
+actor Utilizador
+participant ":Controller" as C
+participant ":PilotoView" as V
+participant ":PilotoService" as S
+participant ":ParticipacaoContainer" as PC
+participant ":EquipaContainer" as EC
+
+Utilizador -> C : seleciona "Pilotos > Remover"
+C -> V : getId()
+V --> C : id
+C -> S : remove(id)
+S -> PC : hasPiloto(id)
+
+alt piloto tem participações
+  S --> C : throws DataConsistencyException
+  C -> V : printError(msg)
+else piloto pertence a equipa
+  S -> EC : findEquipaByPiloto(id)
+  S --> C : throws DataConsistencyException
+  C -> V : printError(msg)
+else sucesso
+  S -> S : container.remove(id)
+  S -> S : repo.persist()
+  S --> C : ok
+  C -> V : printMessage("Piloto removido com sucesso.")
+end
+@enduml

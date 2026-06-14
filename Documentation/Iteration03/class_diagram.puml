@@ -1,0 +1,479 @@
+@startuml
+
+title Class Diagram - Arquitetura C++ CLI
+
+' ─────────────────────────────────────────
+' Views Layer
+' ─────────────────────────────────────────
+package "views" {
+
+  class View {
+    +menuPrincipal() : int
+    +printMessage(msg) : void
+    +printError(msg) : void
+    +pausar() : void
+  }
+
+  class Utils {
+    +getString(prompt) : string
+    +getNumber(prompt) : int
+  }
+
+  class PilotoView {
+    +menuPilotos() : int
+    +getPiloto() : PilotoInDTO
+    +getId() : int
+    +printPiloto(dto) : void
+    +printPilotos(dtos) : void
+  }
+
+  class EquipaView {
+    +menuEquipas() : int
+    +getEquipa() : EquipaInDTO
+    +getId() : int
+    +getPilotoId() : int
+    +printEquipa(dto) : void
+    +printEquipas(dtos) : void
+  }
+
+  class VeiculoView {
+    +menuVeiculos() : int
+    +getVeiculo() : VeiculoInDTO
+    +getId() : int
+    +getEquipaId() : int
+    +printVeiculo(dto) : void
+    +printVeiculos(dtos) : void
+  }
+
+  class CorridaView {
+    +menuCorridas() : int
+    +getCorrida() : CorridaInDTO
+    +getId() : int
+    +getCampeonatoId() : int
+    +printCorrida(dto) : void
+    +printCorridas(dtos) : void
+  }
+
+  class ParticipacaoView {
+    +menuParticipacoes() : int
+    +getParticipacao() : ParticipacaoInDTO
+    +getPilotoId() : int
+    +getCorridaId() : int
+    +printParticipacoes(dtos) : void
+    +printClassificacaoGeral(list) : void
+  }
+
+  class CampeonatoView {
+    +menuCampeonatos() : int
+    +getCampeonato() : CampeonatoInDTO
+    +getId() : int
+    +getCorridaId() : int
+    +getEquipaId() : int
+    +printCampeonato(dto) : void
+    +printCampeonatos(dtos) : void
+    +printClassificacao(id, nome, list) : void
+  }
+}
+
+' ─────────────────────────────────────────
+' Controllers Layer
+' ─────────────────────────────────────────
+package "controllers" {
+
+  class Controller {
+    -pilotoService  : PilotoService*
+    -equipaService  : EquipaService*
+    -veiculoService : VeiculoService*
+    -corridaService : CorridaService*
+    -participacaoService : ParticipacaoService*
+    -campeonatoService   : CampeonatoService*
+    +run() : void
+    -runPilotos() : void
+    -runEquipas() : void
+    -runVeiculos() : void
+    -runCorridas() : void
+    -runParticipacoes() : void
+    -runCampeonatos() : void
+  }
+}
+
+' ─────────────────────────────────────────
+' Services Layer
+' ─────────────────────────────────────────
+package "services" {
+
+  class PilotoService {
+    -repo : IRacingRepository*
+    +add(dto) : void
+    +getAll(dtos) : void
+    +get(id, dto) : void
+    +remove(id) : void
+    +update(id, dto) : void
+  }
+
+  class EquipaService {
+    -repo : IRacingRepository*
+    +add(dto) : void
+    +getAll(dtos) : void
+    +get(id, dto) : void
+    +remove(id) : void
+    +update(id, dto) : void
+    +addPiloto(equipaId, pilotoId) : void
+    +removePiloto(equipaId, pilotoId) : void
+  }
+
+  class VeiculoService {
+    -repo : IRacingRepository*
+    +add(dto) : void
+    +getAll(dtos) : void
+    +getByEquipa(equipaId, dtos) : void
+    +get(id, dto) : void
+    +remove(id) : void
+    +update(id, dto) : void
+    +assignEquipa(veiculoId, equipaId) : void
+    +unassignEquipa(veiculoId) : void
+  }
+
+  class CorridaService {
+    -repo : IRacingRepository*
+    +add(dto) : void
+    +getAll(dtos) : void
+    +getByCampeonato(campId, dtos) : void
+    +get(id, dto) : void
+    +remove(id) : void
+    +update(id, dto) : void
+    +assignCampeonato(corridaId, campId) : void
+    +unassignCampeonato(corridaId) : void
+  }
+
+  class ParticipacaoService {
+    -repo : IRacingRepository*
+    +add(dto) : void
+    +getByCorrida(corridaId, dtos) : void
+    +getByPiloto(pilotoId, dtos) : void
+    +getClassificacaoGeral() : list
+    +remove(pilotoId, corridaId) : void
+    +update(dto) : void
+  }
+
+  class CampeonatoService {
+    -repo : IRacingRepository*
+    +add(dto) : void
+    +getAll(dtos) : void
+    +get(id, dto) : void
+    +remove(id) : void
+    +update(id, dto) : void
+    +addCorrida(campId, corridaId) : void
+    +removeCorrida(campId, corridaId) : void
+    +addEquipa(campId, equipaId) : void
+    +removeEquipa(campId, equipaId) : void
+    +getClassificacao(campId) : list
+  }
+}
+
+' ─────────────────────────────────────────
+' Repository Layer
+' ─────────────────────────────────────────
+package "repo" {
+
+  interface IRacingRepository {
+    +getModel() : RacingApp*
+    +persist() : void
+  }
+
+  class RacingRepositoryBin {
+    -model   : RacingApp
+    -dataDir : string
+    +getModel() : RacingApp*
+    +persist() : void
+  }
+}
+
+' ─────────────────────────────────────────
+' Model Layer
+' ─────────────────────────────────────────
+package "model" {
+
+  class RacingApp {
+    +getPilotoContainer() : PilotoContainer&
+    +getEquipaContainer() : EquipaContainer&
+    +getVeiculoContainer() : VeiculoContainer&
+    +getCorridaContainer() : CorridaContainer&
+    +getParticipacaoContainer() : ParticipacaoContainer&
+    +getCampeonatoContainer() : CampeonatoContainer&
+  }
+
+  class Piloto {
+    -id        : int
+    -nome      : string
+    -dataNasc  : string
+    -nLicenca  : string
+    +getId() : int
+    +getNome() : string
+    +getDataNasc() : string
+    +getNLicenca() : string
+  }
+
+  class Equipa {
+    -id         : int
+    -nome       : string
+    -pais       : string
+    -pilotoIds  : list<int>
+    +addPiloto(id) : void
+    +removePiloto(id) : void
+    +hasPiloto(id) : bool
+  }
+
+  class Veiculo {
+    -id         : int
+    -modelo     : string
+    -matricula  : string
+    -ano        : int
+    -equipaId   : int
+    +getEquipaId() : int
+    +setEquipaId(id) : void
+  }
+
+  class Corrida {
+    -id            : int
+    -nome          : string
+    -circuito      : string
+    -data          : string
+    -tipo          : TipoCorrida
+    -campeonatoId  : int
+    +getTipo() : TipoCorrida
+    +getCampeonatoId() : int
+  }
+
+  class Participacao {
+    -pilotoId   : int
+    -corridaId  : int
+    -posicao    : int
+    -tempo      : float
+    -pontos     : int
+  }
+
+  class Campeonato {
+    -id          : int
+    -nome        : string
+    -ano         : int
+    -corridaIds  : list<int>
+    -equipaIds   : list<int>
+    +addCorrida(id) : void
+    +addEquipa(id) : void
+    +hasCorrida(id) : bool
+    +hasEquipa(id) : bool
+  }
+
+  class PilotoContainer {
+    +add(nome, dataNasc, nLicenca) : void
+    +get(id) : Piloto*
+    +getAll() : list<Piloto*>
+    +remove(id) : void
+    +update(id, ...) : void
+    +restore(...) : void
+  }
+
+  class EquipaContainer {
+    +add(nome, pais) : void
+    +get(id) : Equipa*
+    +getAll() : list<Equipa*>
+    +remove(id) : void
+    +addPiloto(equipaId, pilotoId) : void
+    +findEquipaByPiloto(pilotoId) : Equipa*
+  }
+
+  class VeiculoContainer {
+    +add(modelo, matricula, ano) : void
+    +get(id) : Veiculo*
+    +getAll() : list<Veiculo*>
+    +getByEquipa(equipaId) : list<Veiculo*>
+    +remove(id) : void
+    +assignEquipa(veiculoId, equipaId) : void
+  }
+
+  class CorridaContainer {
+    +add(nome, circuito, data, tipo) : void
+    +get(id) : Corrida*
+    +getAll() : list<Corrida*>
+    +getByCampeonato(campId) : list<Corrida*>
+    +remove(id) : void
+    +assignCampeonato(corridaId, campId) : void
+  }
+
+  class ParticipacaoContainer {
+    +add(pilotoId, corridaId, posicao, tempo, isCampeonato) : void
+    +get(pilotoId, corridaId) : Participacao*
+    +getByCorrida(corridaId) : list<Participacao*>
+    +getByPiloto(pilotoId) : list<Participacao*>
+    +getAll() : list<Participacao*>
+    +hasPiloto(pilotoId) : bool
+    +hasCorrida(corridaId) : bool
+    +remove(pilotoId, corridaId) : void
+  }
+
+  class CampeonatoContainer {
+    +add(nome, ano) : void
+    +get(id) : Campeonato*
+    +getAll() : list<Campeonato*>
+    +remove(id) : void
+    +addCorrida(campId, corridaId) : void
+    +addEquipa(campId, equipaId) : void
+  }
+}
+
+' ─────────────────────────────────────────
+' DTOs
+' ─────────────────────────────────────────
+package "dto" {
+  class PilotoInDTO   {
+   +nome; +dataNasc; +nLicenca
+   }
+  class PilotoOutDTO  {
+  +id; +nome; +dataNasc; +nLicenca
+  }
+  class EquipaInDTO   {
+  +nome; +pais
+  }
+  class EquipaOutDTO  {
+  +id; +nome; +pais; +pilotoIds
+  }
+  class VeiculoInDTO  {
+  +modelo; +matricula; +ano
+  }
+  class VeiculoOutDTO {
+  +id; +modelo; +matricula; +ano; +equipaId
+  }
+  class CorridaInDTO  {
+  +nome; +circuito; +data; +tipo
+  }
+  class CorridaOutDTO {
+  +id; +nome; +circuito; +data; +tipoStr; +campeonatoId
+  }
+  class ParticipacaoInDTO  {
+  +pilotoId; +corridaId; +posicao; +tempo
+  }
+  class ParticipacaoOutDTO {
+  +pilotoId; +corridaId; +posicao; +tempo; +pontos; +pilotoNome; +corridaNome
+  }
+  class CampeonatoInDTO  {
+  +nome; +ano
+  }
+  class CampeonatoOutDTO {
+  +id; +nome; +ano; +corridaIds; +equipaIds
+  }
+}
+
+' ─────────────────────────────────────────
+' Exceptions
+' ─────────────────────────────────────────
+package "exceptions" {
+  class InvalidDataException
+  class DuplicatedDataException
+  class NoDataException
+  class DataConsistencyException
+}
+
+' ─────────────────────────────────────────
+' Mappers
+' ─────────────────────────────────────────
+package "mappers" {
+  class PilotoMapper {
+    +model2DTO(obj, dto) : void
+    +listModel2listDTO(objs, dtos) : void
+  }
+  class EquipaMapper {
+    +model2DTO(obj, dto) : void
+    +listModel2listDTO(objs, dtos) : void
+  }
+  class VeiculoMapper {
+    +model2DTO(obj, dto) : void
+    +listModel2listDTO(objs, dtos) : void
+  }
+  class CorridaMapper {
+    +model2DTO(obj, dto) : void
+    +listModel2listDTO(objs, dtos) : void
+  }
+  class ParticipacaoMapper {
+    +model2DTO(obj, dto, pilotoNome, corridaNome) : void
+    +listModel2listDTO(objs, dtos, ...) : void
+  }
+  class CampeonatoMapper {
+    +model2DTO(obj, dto) : void
+    +listModel2listDTO(objs, dtos) : void
+  }
+}
+
+' ─────────────────────────────────────────
+' Relations
+' ─────────────────────────────────────────
+
+' Controller → Views & Services
+Controller --> View
+Controller --> PilotoView
+Controller --> EquipaView
+Controller --> VeiculoView
+Controller --> CorridaView
+Controller --> ParticipacaoView
+Controller --> CampeonatoView
+Controller --> PilotoService
+Controller --> EquipaService
+Controller --> VeiculoService
+Controller --> CorridaService
+Controller --> ParticipacaoService
+Controller --> CampeonatoService
+
+' Services → Repository
+PilotoService       --> IRacingRepository
+EquipaService       --> IRacingRepository
+VeiculoService      --> IRacingRepository
+CorridaService      --> IRacingRepository
+ParticipacaoService --> IRacingRepository
+CampeonatoService   --> IRacingRepository
+
+' Repository
+RacingRepositoryBin ..|> IRacingRepository
+RacingRepositoryBin --> RacingApp
+
+' RacingApp → Containers
+RacingApp --> PilotoContainer
+RacingApp --> EquipaContainer
+RacingApp --> VeiculoContainer
+RacingApp --> CorridaContainer
+RacingApp --> ParticipacaoContainer
+RacingApp --> CampeonatoContainer
+
+' Containers → Models
+PilotoContainer       ..> Piloto
+EquipaContainer       ..> Equipa
+VeiculoContainer      ..> Veiculo
+CorridaContainer      ..> Corrida
+ParticipacaoContainer ..> Participacao
+CampeonatoContainer   ..> Campeonato
+
+' Services → Mappers
+PilotoService       ..> PilotoMapper
+EquipaService       ..> EquipaMapper
+VeiculoService      ..> VeiculoMapper
+CorridaService      ..> CorridaMapper
+ParticipacaoService ..> ParticipacaoMapper
+CampeonatoService   ..> CampeonatoMapper
+
+' Mappers → DTOs
+PilotoMapper       ..> PilotoOutDTO
+EquipaMapper       ..> EquipaOutDTO
+VeiculoMapper      ..> VeiculoOutDTO
+CorridaMapper      ..> CorridaOutDTO
+ParticipacaoMapper ..> ParticipacaoOutDTO
+CampeonatoMapper   ..> CampeonatoOutDTO
+
+' Services throw exceptions
+PilotoService       ..> InvalidDataException
+PilotoService       ..> DataConsistencyException
+EquipaService       ..> DuplicatedDataException
+EquipaService       ..> DataConsistencyException
+CorridaService      ..> DataConsistencyException
+ParticipacaoContainer ..> DuplicatedDataException
+PilotoContainer       ..> NoDataException
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+title SSD: UC10 - Adicionar Corrida
+
+actor Utilizador
+participant ":Controller" as C
+participant ":CorridaView" as V
+participant ":CorridaService" as S
+participant ":CorridaContainer" as CC
+
+Utilizador -> C : seleciona "Corridas > Adicionar"
+C -> V : getCorrida()
+V --> C : CorridaInDTO(nome, circuito, data, tipo)
+C -> S : add(dto)
+S -> CC : add(nome, circuito, data, tipo)
+
+alt dados inválidos
+  CC --> S : throws InvalidDataException
+  S --> C : throws InvalidDataException
+  C -> V : printError(msg)
+else sucesso
+  CC --> S : ok
+  S -> S : repo.persist()
+  S --> C : ok
+  C -> V : printMessage("Corrida adicionada com sucesso.")
+end
+@enduml

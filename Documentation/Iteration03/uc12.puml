@@ -1,0 +1,28 @@
+@startuml
+title SSD: UC12 - Classificação por Corrida
+
+actor Utilizador
+participant ":Controller" as C
+participant ":ParticipacaoView" as V
+participant ":ParticipacaoService" as S
+participant ":ParticipacaoContainer" as PAC
+participant ":ParticipacaoMapper" as M
+
+Utilizador -> C : seleciona "Participações > Classificação por corrida"
+C -> V : getCorridaId()
+V --> C : corridaId
+C -> S : getByCorrida(corridaId, dtos)
+S -> PAC : getByCorrida(corridaId)
+PAC --> S : list<Participacao*> ordenada por posição
+S -> M : model2DTO(cada participacao, pilotoNome, corridaNome)
+M --> S : list<ParticipacaoOutDTO>
+S --> C : list<ParticipacaoOutDTO>
+
+alt existem resultados
+  C -> V : printParticipacoes(dtos)
+  V --> Utilizador : classificação formatada
+else sem resultados
+  C -> V : printParticipacoes(dtos)
+  V --> Utilizador : "Sem resultados."
+end
+@enduml

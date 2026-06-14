@@ -1,0 +1,33 @@
+@startuml
+title SSD: UC1 - Adicionar Piloto
+
+actor Utilizador
+participant ":Controller" as C
+participant ":PilotoView" as V
+participant ":PilotoService" as S
+participant ":PilotoContainer" as PC
+participant ":RacingRepositoryBin" as R
+
+Utilizador -> C : seleciona "Pilotos > Adicionar"
+C -> V : getPiloto()
+V --> C : PilotoInDTO(nome, dataNasc, nLicenca)
+C -> S : add(dto)
+S -> R : getModel()
+R --> S : RacingApp*
+S -> PC : add(nome, dataNasc, nLicenca)
+
+alt dados inválidos
+  PC --> S : throws InvalidDataException
+  S --> C : throws InvalidDataException
+  C -> V : printError(msg)
+else licença duplicada
+  PC --> S : throws DuplicatedDataException
+  S --> C : throws DuplicatedDataException
+  C -> V : printError(msg)
+else sucesso
+  PC --> S : ok
+  S -> R : persist()
+  S --> C : ok
+  C -> V : printMessage("Piloto adicionado com sucesso.")
+end
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+title SSD: UC8 - Adicionar Veículo
+
+actor Utilizador
+participant ":Controller" as C
+participant ":VeiculoView" as V
+participant ":VeiculoService" as S
+participant ":VeiculoContainer" as VC
+
+Utilizador -> C : seleciona "Veículos > Adicionar"
+C -> V : getVeiculo()
+V --> C : VeiculoInDTO(modelo, matricula, ano)
+C -> S : add(dto)
+S -> VC : add(modelo, matricula, ano)
+
+alt matrícula duplicada
+  VC --> S : throws DuplicatedDataException
+  S --> C : throws DuplicatedDataException
+  C -> V : printError(msg)
+else dados inválidos
+  VC --> S : throws InvalidDataException
+  S --> C : throws InvalidDataException
+  C -> V : printError(msg)
+else sucesso
+  VC --> S : ok
+  S -> S : repo.persist()
+  S --> C : ok
+  C -> V : printMessage("Veiculo adicionado com sucesso.")
+end
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+title SSD: UC13 - Classificação Geral (Pontos)
+
+actor Utilizador
+participant ":Controller" as C
+participant ":ParticipacaoView" as V
+participant ":ParticipacaoService" as S
+participant ":ParticipacaoContainer" as PAC
+participant ":PilotoContainer" as PC
+
+Utilizador -> C : seleciona "Participações > Classificação geral"
+C -> S : getClassificacaoGeral()
+S -> PAC : getAll()
+PAC --> S : todas as participações
+S -> S : filtra corridas do tipo CAMPEONATO
+S -> S : acumula pontos por pilotoId
+S -> PC : get(pilotoId) para cada piloto
+PC --> S : nome do piloto
+S -> S : ordena descrescente por pontos totais
+S --> C : list<pair<nome, pontos>>
+C -> V : printClassificacaoGeral(classificacao)
+V --> Utilizador : ranking geral
+@enduml

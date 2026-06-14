@@ -1,0 +1,38 @@
+@startuml
+title SSD: UC11 - Registar Participação
+
+actor Utilizador
+participant ":Controller" as C
+participant ":ParticipacaoView" as V
+participant ":ParticipacaoService" as S
+participant ":PilotoContainer" as PC
+participant ":CorridaContainer" as CC
+participant ":ParticipacaoContainer" as PAC
+
+Utilizador -> C : seleciona "Participações > Registar resultado"
+C -> V : getParticipacao()
+V --> C : ParticipacaoInDTO(pilotoId, corridaId, posicao, tempo)
+C -> S : add(dto)
+S -> PC : get(pilotoId)
+
+alt piloto não existe
+  PC --> S : throws NoDataException
+  S --> C : throws NoDataException
+  C -> V : printError(msg)
+else corrida não existe
+  S -> CC : get(corridaId)
+  CC --> S : throws NoDataException
+  S --> C : throws NoDataException
+  C -> V : printError(msg)
+else participação já existe
+  S -> PAC : add(pilotoId, corridaId, posicao, tempo, isCampeonato)
+  PAC --> S : throws DuplicatedDataException
+  S --> C : throws DuplicatedDataException
+  C -> V : printError(msg)
+else sucesso
+  PAC --> S : ok (pontos calculados automaticamente se CAMPEONATO)
+  S -> S : repo.persist()
+  S --> C : ok
+  C -> V : printMessage("Resultado registado com sucesso.")
+end
+@enduml

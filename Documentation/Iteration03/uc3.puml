@@ -1,0 +1,25 @@
+@startuml
+title SSD: UC3 - Consultar Piloto
+
+actor Utilizador
+participant ":Controller" as C
+participant ":PilotoView" as V
+participant ":PilotoService" as S
+participant ":PilotoMapper" as M
+
+Utilizador -> C : seleciona "Pilotos > Consultar"
+C -> V : getId()
+V --> C : id
+C -> S : get(id, dto)
+S -> M : model2DTO(piloto, dto)
+
+alt piloto não encontrado
+  S --> C : throws NoDataException
+  C -> V : printError(msg)
+else sucesso
+  M --> S : PilotoOutDTO
+  S --> C : ok
+  C -> V : printPiloto(dto)
+  V --> Utilizador : dados do piloto
+end
+@enduml

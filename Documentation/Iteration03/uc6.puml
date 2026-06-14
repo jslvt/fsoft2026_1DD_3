@@ -1,0 +1,30 @@
+@startuml
+title SSD: UC6 - Adicionar Equipa
+
+actor Utilizador
+participant ":Controller" as C
+participant ":EquipaView" as V
+participant ":EquipaService" as S
+participant ":EquipaContainer" as EC
+
+Utilizador -> C : seleciona "Equipas > Adicionar"
+C -> V : getEquipa()
+V --> C : EquipaInDTO(nome, pais)
+C -> S : add(dto)
+S -> EC : add(nome, pais)
+
+alt dados inválidos
+  EC --> S : throws InvalidDataException
+  S --> C : throws InvalidDataException
+  C -> V : printError(msg)
+else equipa duplicada
+  EC --> S : throws DuplicatedDataException
+  S --> C : throws DuplicatedDataException
+  C -> V : printError(msg)
+else sucesso
+  EC --> S : ok
+  S -> S : repo.persist()
+  S --> C : ok
+  C -> V : printMessage("Equipa adicionada com sucesso.")
+end
+@enduml

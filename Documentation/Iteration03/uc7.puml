@@ -1,0 +1,33 @@
+@startuml
+title SSD: UC7 - Adicionar Piloto a Equipa
+
+actor Utilizador
+participant ":Controller" as C
+participant ":EquipaView" as V
+participant ":EquipaService" as S
+participant ":PilotoContainer" as PC
+participant ":EquipaContainer" as EC
+
+Utilizador -> C : seleciona "Equipas > Adicionar piloto a equipa"
+C -> V : getId()
+V --> C : equipaId
+C -> V : getPilotoId()
+V --> C : pilotoId
+C -> S : addPiloto(equipaId, pilotoId)
+S -> PC : get(pilotoId)
+
+alt piloto não existe
+  PC --> S : throws NoDataException
+  S --> C : throws NoDataException
+  C -> V : printError(msg)
+else piloto já pertence a outra equipa
+  S -> EC : findEquipaByPiloto(pilotoId)
+  S --> C : throws DataConsistencyException
+  C -> V : printError(msg)
+else sucesso
+  S -> EC : addPiloto(equipaId, pilotoId)
+  S -> S : repo.persist()
+  S --> C : ok
+  C -> V : printMessage("Piloto adicionado a equipa.")
+end
+@enduml

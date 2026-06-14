@@ -1,0 +1,64 @@
+@startuml
+
+class Piloto {
+  -id        : int
+  -nome      : string
+  -dataNasc  : string
+  -nLicenca  : string
+}
+
+class Equipa {
+  -id         : int
+  -nome       : string
+  -pais       : string
+  -pilotoIds  : list<int>
+}
+
+class Veiculo {
+  -id         : int
+  -modelo     : string
+  -matricula  : string
+  -ano        : int
+  -equipaId   : int
+}
+
+class Corrida {
+  -id            : int
+  -nome          : string
+  -circuito      : string
+  -data          : string
+  -tipo          : TipoCorrida
+  -campeonatoId  : int
+}
+
+enum TipoCorrida {
+  NORMAL
+  CAMPEONATO
+}
+
+class Participacao {
+  -pilotoId   : int
+  -corridaId  : int
+  -posicao    : int
+  -tempo      : float
+  -pontos     : int
+}
+
+class Campeonato {
+  -id          : int
+  -nome        : string
+  -ano         : int
+  -corridaIds  : list<int>
+  -equipaIds   : list<int>
+}
+
+' Relations
+Equipa      "1"     --  "0..*"  Piloto       : tem
+Equipa      "1"     --  "0..*"  Veiculo      : possui
+Corrida     "0..*"  --  "1"     Campeonato   : pertence a
+Equipa      "0..*"  --  "0..*"  Campeonato   : inscrita em
+Corrida     "*"     --  TipoCorrida
+Piloto      "1"     --  "0..*"  Participacao
+Corrida     "1"     --  "0..*"  Participacao
+
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+title SSD: UC16 - Ver Classificação do Campeonato
+
+actor Utilizador
+participant ":Controller" as C
+participant ":CampeonatoView" as V
+participant ":CampeonatoService" as S
+participant ":CampeonatoContainer" as CAC
+participant ":ParticipacaoContainer" as PAC
+participant ":PilotoContainer" as PC
+
+Utilizador -> C : seleciona "Campeonatos > Ver classificação"
+C -> V : getId()
+V --> C : campeonatoId
+C -> S : get(campeonatoId, dto)
+C -> S : getClassificacao(campeonatoId)
+S -> CAC : get(campeonatoId)
+CAC --> S : Campeonato* (com corridaIds)
+S -> PAC : getByCorrida(corridaId) para cada corrida
+PAC --> S : participações de cada corrida
+S -> S : acumula pontos por pilotoId
+S -> PC : get(pilotoId) para cada piloto
+PC --> S : nome do piloto
+S -> S : ordena decrescente por pontos
+S --> C : list<pair<nome, pontos>>
+C -> V : printClassificacao(id, nome, classificacao)
+V --> Utilizador : ranking do campeonato
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+title SSD: UC14 - Adicionar Campeonato
+
+actor Utilizador
+participant ":Controller" as C
+participant ":CampeonatoView" as V
+participant ":CampeonatoService" as S
+participant ":CampeonatoContainer" as CC
+
+Utilizador -> C : seleciona "Campeonatos > Adicionar"
+C -> V : getCampeonato()
+V --> C : CampeonatoInDTO(nome, ano)
+C -> S : add(dto)
+S -> CC : add(nome, ano)
+
+alt dados inválidos
+  CC --> S : throws InvalidDataException
+  S --> C : throws InvalidDataException
+  C -> V : printError(msg)
+else sucesso
+  CC --> S : ok
+  S -> S : repo.persist()
+  S --> C : ok
+  C -> V : printMessage("Campeonato adicionado com sucesso.")
+end
+@enduml

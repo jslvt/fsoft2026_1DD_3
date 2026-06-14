@@ -1,0 +1,32 @@
+@startuml
+title SSD: UC5 - Atualizar Piloto
+
+actor Utilizador
+participant ":Controller" as C
+participant ":PilotoView" as V
+participant ":PilotoService" as S
+participant ":PilotoContainer" as PC
+
+Utilizador -> C : seleciona "Pilotos > Atualizar"
+C -> V : getId()
+V --> C : id
+C -> V : getPiloto()
+V --> C : PilotoInDTO(nome, dataNasc, nLicenca)
+C -> S : update(id, dto)
+S -> PC : update(id, nome, dataNasc, nLicenca)
+
+alt piloto não encontrado
+  PC --> S : throws NoDataException
+  S --> C : throws NoDataException
+  C -> V : printError(msg)
+else dados inválidos
+  PC --> S : throws InvalidDataException
+  S --> C : throws InvalidDataException
+  C -> V : printError(msg)
+else sucesso
+  PC --> S : ok
+  S -> S : repo.persist()
+  S --> C : ok
+  C -> V : printMessage("Piloto atualizado com sucesso.")
+end
+@enduml

@@ -1,0 +1,176 @@
+@startuml
+
+package "main" {
+  [main.cpp]
+}
+
+package "headers/controllers" {
+  [Controller.h]
+}
+
+package "sources/controllers" {
+  [Controller.cpp]
+}
+
+package "headers/views" {
+  [View.h]
+  [Utils.h]
+  [PilotoView.h]
+  [EquipaView.h]
+  [VeiculoView.h]
+  [CorridaView.h]
+  [ParticipacaoView.h]
+  [CampeonatoView.h]
+}
+
+package "sources/views" {
+  [View.cpp]
+  [Utils.cpp]
+  [PilotoView.cpp]
+  [EquipaView.cpp]
+  [VeiculoView.cpp]
+  [CorridaView.cpp]
+  [ParticipacaoView.cpp]
+  [CampeonatoView.cpp]
+}
+
+package "headers/services" {
+  [PilotoService.h]
+  [EquipaService.h]
+  [VeiculoService.h]
+  [CorridaService.h]
+  [ParticipacaoService.h]
+  [CampeonatoService.h]
+}
+
+package "sources/services" {
+  [PilotoService.cpp]
+  [EquipaService.cpp]
+  [VeiculoService.cpp]
+  [CorridaService.cpp]
+  [ParticipacaoService.cpp]
+  [CampeonatoService.cpp]
+}
+
+package "headers/repo" {
+  [IRacingRepository.h]
+  [RacingRepositoryBin.h]
+}
+
+package "sources/repo" {
+  [RacingRepositoryBin.cpp]
+}
+
+package "headers/model" {
+  [RacingApp.h]
+  [Piloto.h]
+  [PilotoContainer.h]
+  [Equipa.h]
+  [EquipaContainer.h]
+  [Veiculo.h]
+  [VeiculoContainer.h]
+  [Corrida.h]
+  [CorridaContainer.h]
+  [TipoCorrida.h]
+  [Participacao.h]
+  [ParticipacaoContainer.h]
+  [Campeonato.h]
+  [CampeonatoContainer.h]
+}
+
+package "sources/model" {
+  [RacingApp.cpp]
+  [Piloto.cpp]
+  [PilotoContainer.cpp]
+  [Equipa.cpp]
+  [EquipaContainer.cpp]
+  [Veiculo.cpp]
+  [VeiculoContainer.cpp]
+  [Corrida.cpp]
+  [CorridaContainer.cpp]
+  [Participacao.cpp]
+  [ParticipacaoContainer.cpp]
+  [Campeonato.cpp]
+  [CampeonatoContainer.cpp]
+}
+
+package "headers/dto" {
+  [PilotoInDTO.h]
+  [PilotoOutDTO.h]
+  [EquipaInDTO.h]
+  [EquipaOutDTO.h]
+  [VeiculoInDTO.h]
+  [VeiculoOutDTO.h]
+  [CorridaInDTO.h]
+  [CorridaOutDTO.h]
+  [ParticipacaoInDTO.h]
+  [ParticipacaoOutDTO.h]
+  [CampeonatoInDTO.h]
+  [CampeonatoOutDTO.h]
+}
+
+package "headers/mappers" {
+  [PilotoMapper.h]
+  [EquipaMapper.h]
+  [VeiculoMapper.h]
+  [CorridaMapper.h]
+  [ParticipacaoMapper.h]
+  [CampeonatoMapper.h]
+}
+
+package "sources/mappers" {
+  [PilotoMapper.cpp]
+  [EquipaMapper.cpp]
+  [VeiculoMapper.cpp]
+  [CorridaMapper.cpp]
+  [ParticipacaoMapper.cpp]
+  [CampeonatoMapper.cpp]
+}
+
+package "headers/exceptions" {
+  [InvalidDataException.h]
+  [DuplicatedDataException.h]
+  [NoDataException.h]
+  [DataConsistencyException.h]
+}
+
+package "data" <<folder>> {
+  [pilotos.bin]
+  [equipas.bin]
+  [veiculos.bin]
+  [corridas.bin]
+  [participacoes.bin]
+  [campeonatos.bin]
+}
+
+[main.cpp]          --> [Controller.h]
+[Controller.cpp]    --> [View.h]
+[Controller.cpp]    --> [PilotoView.h]
+[Controller.cpp]    --> [EquipaView.h]
+[Controller.cpp]    --> [VeiculoView.h]
+[Controller.cpp]    --> [CorridaView.h]
+[Controller.cpp]    --> [ParticipacaoView.h]
+[Controller.cpp]    --> [CampeonatoView.h]
+[Controller.cpp]    --> [PilotoService.h]
+[Controller.cpp]    --> [EquipaService.h]
+[Controller.cpp]    --> [VeiculoService.h]
+[Controller.cpp]    --> [CorridaService.h]
+[Controller.cpp]    --> [ParticipacaoService.h]
+[Controller.cpp]    --> [CampeonatoService.h]
+
+[PilotoService.cpp]       --> [IRacingRepository.h]
+[EquipaService.cpp]       --> [IRacingRepository.h]
+[VeiculoService.cpp]      --> [IRacingRepository.h]
+[CorridaService.cpp]      --> [IRacingRepository.h]
+[ParticipacaoService.cpp] --> [IRacingRepository.h]
+[CampeonatoService.cpp]   --> [IRacingRepository.h]
+
+[RacingRepositoryBin.cpp] --> [RacingApp.h]
+[RacingRepositoryBin.cpp] --> [pilotos.bin]
+[RacingRepositoryBin.cpp] --> [equipas.bin]
+[RacingRepositoryBin.cpp] --> [veiculos.bin]
+[RacingRepositoryBin.cpp] --> [corridas.bin]
+[RacingRepositoryBin.cpp] --> [participacoes.bin]
+[RacingRepositoryBin.cpp] --> [campeonatos.bin]
+
+@enduml

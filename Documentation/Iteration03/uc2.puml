@@ -1,0 +1,23 @@
+@startuml
+title SSD: UC2 - Listar Pilotos
+
+actor Utilizador
+participant ":Controller" as C
+participant ":PilotoView" as V
+participant ":PilotoService" as S
+participant ":PilotoMapper" as M
+
+Utilizador -> C : seleciona "Pilotos > Listar todos"
+C -> S : getAll(dtos)
+S -> M : listModel2listDTO(pilotos, dtos)
+M --> S : list<PilotoOutDTO>
+S --> C : list<PilotoOutDTO>
+
+alt existem pilotos
+  C -> V : printPilotos(dtos)
+  V --> Utilizador : lista formatada
+else sem pilotos
+  C -> V : printPilotos(dtos)
+  V --> Utilizador : "Sem pilotos registados."
+end
+@enduml

@@ -1,0 +1,117 @@
+@startuml
+
+title Use Cases - Software de Gestão de Pilotos de Automobilismo
+
+actor Utilizador
+
+rectangle "Sistema de Gestão de Automobilismo" {
+
+  ' --- Piloto ---
+  usecase "Adicionar Piloto"           as UC1
+  usecase "Consultar Piloto"           as UC2
+  usecase "Remover Piloto"             as UC3
+  usecase "Atualizar Piloto"           as UC4
+  usecase "Listar Pilotos"             as UC5
+
+  ' --- Equipa ---
+  usecase "Adicionar Equipa"           as UC6
+  usecase "Consultar Equipa"           as UC7
+  usecase "Remover Equipa"             as UC8
+  usecase "Atualizar Equipa"           as UC9
+  usecase "Listar Equipas"             as UC10
+  usecase "Adicionar Piloto a Equipa"  as UC11
+  usecase "Remover Piloto de Equipa"   as UC12
+
+  ' --- Veiculo ---
+  usecase "Adicionar Veículo"          as UC13
+  usecase "Consultar Veículo"          as UC14
+  usecase "Remover Veículo"            as UC15
+  usecase "Atualizar Veículo"          as UC16
+  usecase "Listar Veículos"            as UC17
+  usecase "Associar Veículo a Equipa"  as UC18
+  usecase "Desassociar Veículo"        as UC19
+
+  ' --- Corrida ---
+  usecase "Adicionar Corrida"          as UC20
+  usecase "Consultar Corrida"          as UC21
+  usecase "Remover Corrida"            as UC22
+  usecase "Atualizar Corrida"          as UC23
+  usecase "Listar Corridas"            as UC24
+
+  ' --- Participacao ---
+  usecase "Registar Participação"      as UC25
+  usecase "Classificação por Corrida"  as UC26
+  usecase "Resultados por Piloto"      as UC27
+  usecase "Classificação Geral"        as UC28
+  usecase "Remover Participação"       as UC29
+  usecase "Atualizar Participação"     as UC30
+
+  ' --- Campeonato ---
+  usecase "Adicionar Campeonato"       as UC31
+  usecase "Consultar Campeonato"       as UC32
+  usecase "Remover Campeonato"         as UC33
+  usecase "Atualizar Campeonato"       as UC34
+  usecase "Listar Campeonatos"         as UC35
+  usecase "Adicionar Corrida ao Campeonato" as UC36
+  usecase "Remover Corrida do Campeonato"   as UC37
+  usecase "Inscrever Equipa no Campeonato"  as UC38
+  usecase "Remover Equipa do Campeonato"    as UC39
+  usecase "Ver Classificação do Campeonato" as UC40
+}
+
+Utilizador --> UC1
+Utilizador --> UC2
+Utilizador --> UC3
+Utilizador --> UC4
+Utilizador --> UC5
+Utilizador --> UC6
+Utilizador --> UC7
+Utilizador --> UC8
+Utilizador --> UC9
+Utilizador --> UC10
+Utilizador --> UC11
+Utilizador --> UC12
+Utilizador --> UC13
+Utilizador --> UC14
+Utilizador --> UC15
+Utilizador --> UC16
+Utilizador --> UC17
+Utilizador --> UC18
+Utilizador --> UC19
+Utilizador --> UC20
+Utilizador --> UC21
+Utilizador --> UC22
+Utilizador --> UC23
+Utilizador --> UC24
+Utilizador --> UC25
+Utilizador --> UC26
+Utilizador --> UC27
+Utilizador --> UC28
+Utilizador --> UC29
+Utilizador --> UC30
+Utilizador --> UC31
+Utilizador --> UC32
+Utilizador --> UC33
+Utilizador --> UC34
+Utilizador --> UC35
+Utilizador --> UC36
+Utilizador --> UC37
+Utilizador --> UC38
+Utilizador --> UC39
+Utilizador --> UC40
+
+UC3  .>  UC2  : <<include>>
+UC11 .>  UC6  : <<include>>
+UC11 .>  UC1  : <<include>>
+UC18 .>  UC13 : <<include>>
+UC18 .>  UC6  : <<include>>
+UC25 .>  UC1  : <<include>>
+UC25 .>  UC20 : <<include>>
+UC26 .>  UC20 : <<include>>
+UC36 .>  UC20 : <<include>>
+UC36 .>  UC31 : <<include>>
+UC38 .>  UC6  : <<include>>
+UC38 .>  UC31 : <<include>>
+UC40 .>  UC31 : <<include>>
+
+@enduml
